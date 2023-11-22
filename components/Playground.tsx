@@ -4,8 +4,6 @@ import { Button, Input, VStack } from "@chakra-ui/react"
 import Peer from "peerjs"
 import { useEffect, useRef, useState } from "react"
 
-const peer = new Peer()
-
 const Playground = () => {
 	const [peerId, setPeerId] = useState("")
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
@@ -14,31 +12,32 @@ const Playground = () => {
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
 	useEffect(() => {
-		// const peer = new Peer()
-		peer.on("open", (id) => {
-			setPeerId(id)
-		})
+		import("peerjs").then(({ default: Peer }) => {
+			const peer = new Peer()
+			peer.on("open", (id) => {
+				setPeerId(id)
+			})
 
-		peer.on("call", async (call) => {
-			try {
-				const stream = await navigator.mediaDevices.getUserMedia({
-					audio: true,
-				})
-				call.answer(stream)
-				call.on("stream", function (remoteStream) {
-					if (audioRef.current) {
-						audioRef.current.srcObject = remoteStream
-						audioRef.current.autoplay = true
-					} else {
-						console.log("error")
-					}
-				})
-			} catch (error) {
-				console.log(error)
-			}
+			peer.on("call", async (call) => {
+				try {
+					const stream = await navigator.mediaDevices.getUserMedia({
+						audio: true,
+					})
+					call.answer(stream)
+					call.on("stream", function (remoteStream) {
+						if (audioRef.current) {
+							audioRef.current.srcObject = remoteStream
+							audioRef.current.autoplay = true
+						} else {
+							console.log("error")
+						}
+					})
+				} catch (error) {
+					console.log(error)
+				}
+			})
+			peerInstance.current = peer
 		})
-
-		peerInstance.current = peer
 	}, [])
 
 	const call = (remotePeerId: string) => async () => {
