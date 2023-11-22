@@ -4,8 +4,6 @@ import { Button, Input, VStack } from "@chakra-ui/react"
 import Peer from "peerjs"
 import { useEffect, useRef, useState } from "react"
 
-// console.log(navigator.mediaDevices)
-
 const peer = new Peer()
 
 const Playground = () => {
