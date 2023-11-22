@@ -16,18 +16,28 @@ const Playground = () => {
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
 	useEffect(() => {
+		// const peer = new Peer()
 		peer.on("open", (id) => {
 			setPeerId(id)
 		})
 
 		peer.on("call", async (call) => {
-			call.on("stream", function (remoteStream) {
-				if (audioRef.current) {
-					audioRef.current.srcObject = remoteStream
-				} else {
-					console.log("error")
-				}
-			})
+			try {
+				const stream = await navigator.mediaDevices.getUserMedia({
+					audio: true,
+				})
+				call.answer(stream)
+				call.on("stream", function (remoteStream) {
+					if (audioRef.current) {
+						audioRef.current.srcObject = remoteStream
+						audioRef.current.autoplay = true
+					} else {
+						console.log("error")
+					}
+				})
+			} catch (error) {
+				console.log(error)
+			}
 		})
 
 		peerInstance.current = peer
@@ -74,7 +84,7 @@ const Playground = () => {
 			>
 				call
 			</Button>
-			<audio ref={audioRef}></audio>
+			<audio controls ref={audioRef}></audio>
 		</div>
 	)
 }
