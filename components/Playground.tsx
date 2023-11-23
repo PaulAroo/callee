@@ -1,5 +1,3 @@
-"use client"
-
 import { Button, Input, VStack } from "@chakra-ui/react"
 import Peer from "peerjs"
 import { useEffect, useRef, useState } from "react"
