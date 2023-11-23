@@ -38,7 +38,7 @@ jobs:
           node-version: "21"
 
       - name: 📦 install dependencies
-        run: pnpm ci
+        run: pnpm install
 
       - name: 🔨 build
         run: pnpm run build
@@ -54,7 +54,7 @@ jobs:
       - name: 🗃️ reconstitute node_modules for production
         run: |
           rm -rf node_modules
-          pnpm ci --omit=dev
+          pnpm install -P
 
       - name: 📝 configure pages
         uses: actions/configure-pages@v3
