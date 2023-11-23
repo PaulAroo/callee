@@ -8,25 +8,20 @@ import HomePage from "./pages/index.tsx"
 import SignInPage from "./pages/signin.tsx"
 import SignUpPage from "./pages/signup.tsx"
 
-export const router = createBrowserRouter(
-	[
-		{
-			path: "/",
-			element: <HomePage />,
-		},
-		{
-			path: "/signin",
-			element: <SignInPage />,
-		},
-		{
-			path: "/signup",
-			element: <SignUpPage />,
-		},
-	],
+export const router = createBrowserRouter([
 	{
-		basename: "/callee",
-	}
-)
+		path: "/",
+		element: <HomePage />,
+	},
+	{
+		path: "/signin",
+		element: <SignInPage />,
+	},
+	{
+		path: "/signup",
+		element: <SignUpPage />,
+	},
+])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
