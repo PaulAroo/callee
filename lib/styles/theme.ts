@@ -11,18 +11,10 @@ const theme = extendTheme({
 	config,
 	colors: {
 		brand: {
-			darkGrey: "#1C1D22",
+			darkgrey: "#1C1D22",
 			purple: "#A000EB",
 		},
 	},
-	// styles: {
-	// 	global: {
-	// 		body: {
-	// 			bg: "brand.body",
-	// 			color: "white",
-	// 		},
-	// 	},
-	// },
 	fonts: {
 		body: `'Nunito Variable', sans-serif`,
 	},

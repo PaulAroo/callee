@@ -12,10 +12,16 @@ function PasswordInput() {
 				variant={"flushed"}
 				type={show ? "text" : "password"}
 				placeholder="Password"
+				id="password"
 			/>
-			<InputRightElement color={"brand.purple"}>
-				<Button onClick={handleClick}>
-					{show ? <IoMdEyeOff /> : <IoMdEye />}
+			<InputRightElement>
+				<Button
+					color="brand.purple"
+					variant="ghost"
+					p="0px"
+					onClick={handleClick}
+				>
+					{show ? <IoMdEye /> : <IoMdEyeOff />}
 				</Button>
 			</InputRightElement>
 		</InputGroup>
