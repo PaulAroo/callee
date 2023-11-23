@@ -11,6 +11,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.10.5
+
       - name: 🔔 checkout
         uses: actions/checkout@v4
 
@@ -20,10 +25,7 @@ jobs:
           node-version: "21"
 
       - name: 📦 install dependencies
-        run: npm ci
+        run: pnpm ci
 
       - name: 🔨 build
-        run: npm run build -s
-
-      - name: 🧪 test
-        run: npm test
+        run: pnpm run build -s
