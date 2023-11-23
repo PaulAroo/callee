@@ -15,10 +15,6 @@ import {
 	BoxProps,
 	FlexProps,
 	Menu,
-	MenuButton,
-	MenuDivider,
-	MenuItem,
-	MenuList,
 } from "@chakra-ui/react"
 import {
 	FiHome,
@@ -28,7 +24,6 @@ import {
 	FiSettings,
 	FiMenu,
 	FiBell,
-	FiChevronDown,
 } from "react-icons/fi"
 import { IconType } from "react-icons"
 

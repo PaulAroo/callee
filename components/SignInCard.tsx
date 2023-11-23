@@ -5,14 +5,11 @@ import {
 	CardBody,
 	CardHeader,
 	FormControl,
-	FormLabel,
 	Heading,
 	Input,
 	InputGroup,
-	InputRightAddon,
 	InputRightElement,
 } from "@chakra-ui/react"
-import React from "react"
 import PasswordInput from "./Password"
 
 function SignInCard() {
