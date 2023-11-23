@@ -28,4 +28,4 @@ jobs:
         run: pnpm install
 
       - name: 🔨 build
-        run: pnpm run build -s
+        run: pnpm run build
