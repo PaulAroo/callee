@@ -1,5 +1,3 @@
-"use client"
-
 import { MdEmail } from "react-icons/md"
 
 import {

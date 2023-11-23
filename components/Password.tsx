@@ -1,5 +1,3 @@
-"use client"
-
 import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
 import { useState } from "react"
 import { IoMdEyeOff, IoMdEye } from "react-icons/io"
