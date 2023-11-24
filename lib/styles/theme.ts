@@ -10,9 +10,15 @@ const config: ThemeConfig = {
 const theme = extendTheme({
 	config,
 	colors: {
+		body: {
+			bg: "red",
+		},
 		brand: {
 			darkgrey: "#1C1D22",
-			purple: "#A000EB",
+			purple: {
+				100: "#C854FF",
+				200: "#A000EB",
+			},
 		},
 	},
 	fonts: {
