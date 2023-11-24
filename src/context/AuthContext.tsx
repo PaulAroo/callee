@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useEffect, useReducer } from "react"
+import { redirect } from "react-router-dom"
 
 export interface User {
 	username: string
@@ -79,6 +80,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 	useEffect(() => {
 		localStorage.setItem("user", JSON.stringify(state.user))
 	}, [state.user])
+
+	if (!state.user) {
+		redirect("/login")
+	}
 
 	return (
 		<AuthContext.Provider

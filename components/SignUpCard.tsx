@@ -94,7 +94,7 @@ function SignUpCard({
 				<Text mt="0.62rem" fontWeight={400} align="center" fontSize="xs">
 					Don’t have an account?{" "}
 					<Text as="span" color="brand.purple.100" fontWeight={700}>
-						<Link to="/signin">Sign in</Link>
+						<Link to="/login">Sign in</Link>
 					</Text>
 				</Text>
 			</CardBody>

@@ -28,6 +28,8 @@ import { RxDotsVertical } from "react-icons/rx"
 import { IoMdCall } from "react-icons/io"
 import { SlCallOut } from "react-icons/sl"
 import { SlCallIn } from "react-icons/sl"
+import { AuthContext } from "../src/context/AuthContext"
+import { useContext } from "react"
 
 interface LinkItemProps {
 	name: string
@@ -179,6 +181,7 @@ const NavItem = ({ name, callDetails }: LinkItemProps) => {
 }
 
 const MobileNav = ({ isOpen, onOpen, ...rest }: MobileProps) => {
+	const { user } = useContext(AuthContext)
 	return (
 		<Flex
 			ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }}
@@ -199,7 +202,7 @@ const MobileNav = ({ isOpen, onOpen, ...rest }: MobileProps) => {
 						"https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
 					}
 				/>
-				<Text>Lara Mueller</Text>
+				<Text>{user?.username}</Text>
 			</HStack>
 
 			<HStack>
