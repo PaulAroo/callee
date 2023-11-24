@@ -1,23 +1,30 @@
-import { Button, Input } from "@chakra-ui/react"
-import Peer from "peerjs"
-import { useContext, useEffect, useRef, useState } from "react"
-import { AuthContext } from "../src/context/AuthContext"
+import { Badge, Button, HStack, Input, Text } from "@chakra-ui/react"
+import Peer, { MediaConnection } from "peerjs"
+import { useEffect, useRef, useState } from "react"
 
 const Playground = () => {
-	const { user } = useContext(AuthContext)
 	const [peerId, setPeerId] = useState("")
+	const [callOngoing, setCallOngoing] = useState(false)
+	const [callInstance, setCallInstance] = useState<
+		MediaConnection | undefined
+	>()
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
 
-	const peerInstance = useRef<Peer | null>(null)
+	const peerInstance = useRef<Peer>(new Peer()).current
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
 	useEffect(() => {
-		const peer = new Peer(user?.id || "")
-		peer.on("open", (id) => {
+		peerInstance.on("open", (id) => {
+			console.log("established")
 			setPeerId(id)
 		})
 
-		peer.on("call", async (call) => {
+		peerInstance.on("error", (error) => {
+			console.log("peer connection error", error)
+			peerInstance.reconnect()
+		})
+
+		peerInstance.on("call", async (call) => {
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					audio: true,
@@ -31,12 +38,21 @@ const Playground = () => {
 						console.log("error")
 					}
 				})
+				call.on("close", () => {
+					setCallOngoing(false)
+				})
 			} catch (error) {
 				console.log(error)
 			}
 		})
-		peerInstance.current = peer
 	}, [])
+
+	const hangUp = () => {
+		if (callInstance) {
+			callInstance.close()
+			setCallInstance(undefined)
+		}
+	}
 
 	const call = (remotePeerId: string) => async () => {
 		try {
@@ -44,9 +60,12 @@ const Playground = () => {
 				audio: true,
 			})
 
-			if (peerInstance.current) {
-				const call = peerInstance.current.call(remotePeerId, stream)
+			if (peerInstance) {
+				const call = peerInstance.call(remotePeerId, stream)
+
+				setCallInstance(call)
 				call.on("stream", (remoteStream) => {
+					setCallOngoing(true)
 					if (audioRef.current) {
 						audioRef.current.srcObject = remoteStream
 						audioRef.current.play()
@@ -60,26 +79,44 @@ const Playground = () => {
 
 	return (
 		<div>
-			playground
 			<p>peer ID: {peerId}</p>
-			<Input
-				placeholder="remote peer id"
-				size="md"
-				onChange={(e) => setRemotePeerIdValue(e.target.value)}
-				width={"fit-content"}
-				value={remotePeerIdValue}
-				variant="outline"
-			/>
+			<HStack mt="0.5rem">
+				<Text>peer connection:</Text>
+				<Badge colorScheme={peerInstance.open ? "green" : "red"}>
+					{peerInstance.open ? "open" : "closed"}
+				</Badge>
+			</HStack>
+			<HStack my="1rem">
+				<Input
+					placeholder="remote peer id"
+					size="md"
+					onChange={(e) => setRemotePeerIdValue(e.target.value)}
+					width={"fit-content"}
+					value={remotePeerIdValue}
+					variant="outline"
+				/>
+				<Button
+					isDisabled={!remotePeerIdValue}
+					colorScheme="brand.purple"
+					size={"md"}
+					variant={"outline"}
+					onClick={call(remotePeerIdValue)}
+				>
+					call
+				</Button>
+			</HStack>
+			<audio controls ref={audioRef}></audio>
+			{callOngoing && <Text>call ongoing</Text>}
 			<Button
-				isDisabled={!remotePeerIdValue}
-				colorScheme="blue"
+				my="1rem"
+				isDisabled={!callOngoing}
+				colorScheme="brand.purple"
 				size={"sm"}
 				variant={"outline"}
-				onClick={call(remotePeerIdValue)}
+				onClick={hangUp}
 			>
-				call
+				hang up
 			</Button>
-			<audio controls ref={audioRef}></audio>
 		</div>
 	)
 }
