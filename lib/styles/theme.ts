@@ -14,7 +14,8 @@ const theme = extendTheme({
 			bg: "red",
 		},
 		brand: {
-			darkgrey: "#1C1D22",
+			darkgrey: "#292B2E",
+			dark: "#0A000F",
 			purple: {
 				100: "#C854FF",
 				200: "#A000EB",
