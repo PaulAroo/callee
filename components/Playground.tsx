@@ -1,10 +1,10 @@
 import { Button, Input } from "@chakra-ui/react"
 import Peer from "peerjs"
-import { useEffect, useRef, useState } from "react"
-
-const peer = new Peer()
+import { useContext, useEffect, useRef, useState } from "react"
+import { AuthContext } from "../src/context/AuthContext"
 
 const Playground = () => {
+	const { user } = useContext(AuthContext)
 	const [peerId, setPeerId] = useState("")
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
 
@@ -12,6 +12,7 @@ const Playground = () => {
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
 	useEffect(() => {
+		const peer = new Peer(user?.id || "")
 		peer.on("open", (id) => {
 			setPeerId(id)
 		})

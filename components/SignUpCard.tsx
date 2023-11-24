@@ -6,7 +6,6 @@ import {
 	Card,
 	CardBody,
 	CardHeader,
-	FormControl,
 	Heading,
 	Input,
 	InputGroup,
@@ -15,13 +14,15 @@ import {
 } from "@chakra-ui/react"
 import PasswordInput from "./PasswordInput"
 import { Link } from "react-router-dom"
-import { ChangeEvent } from "react"
+import { ChangeEvent, FormEvent } from "react"
 
 function SignUpCard({
 	handleInputchange,
 	handleSubmit,
+	busy,
 }: {
-	handleSubmit: () => void
+	busy: boolean
+	handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 	handleInputchange: (e: ChangeEvent<HTMLInputElement>) => void
 }) {
 	return (
@@ -45,7 +46,7 @@ function SignUpCard({
 			</CardHeader>
 
 			<CardBody pt="4.19rem" pb="9rem" px={["3rem", "4rem", "7.75rem"]}>
-				<FormControl>
+				<form onSubmit={handleSubmit}>
 					<InputGroup mb="2.25rem">
 						<Input
 							pl="0.5rem"
@@ -77,22 +78,23 @@ function SignUpCard({
 						</InputRightElement>
 					</InputGroup>
 					<PasswordInput handleInputchange={handleInputchange} />
-				</FormControl>
+					<Button
+						type="submit"
+						fontSize="xs"
+						bg="brand.purple.100 "
+						w="full"
+						mt="2rem"
+						_hover={{ bg: "brand.purple.200" }}
+						isLoading={busy}
+					>
+						Register
+					</Button>
+				</form>
 
-				<Button
-					fontSize="xs"
-					bg="brand.purple.100 "
-					w="full"
-					mt="2rem"
-					_hover={{ bg: "brand.purple.200" }}
-					onClick={handleSubmit}
-				>
-					Register
-				</Button>
 				<Text mt="0.62rem" fontWeight={400} align="center" fontSize="xs">
 					Don’t have an account?{" "}
 					<Text as="span" color="brand.purple.100" fontWeight={700}>
-						<Link to="/signin">Sign in</Link>
+						<Link to="/login">Sign in</Link>
 					</Text>
 				</Text>
 			</CardBody>
