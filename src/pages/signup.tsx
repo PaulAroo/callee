@@ -1,8 +1,8 @@
 import { SimpleGrid, useToast } from "@chakra-ui/react"
 import SignUpCard from "../../components/SignUpCard"
 import { ChangeEvent, FormEvent, useContext, useState } from "react"
-import { AUTH_ACTION_TYPE, AuthContext, User } from "../context/AuthContext"
-import { useLoaderData, useNavigate } from "react-router-dom"
+import { AUTH_ACTION_TYPE, AuthContext } from "../context/AuthContext"
+import { useNavigate } from "react-router-dom"
 import axios from "../axios"
 import { AxiosError } from "axios"
 
@@ -12,13 +12,8 @@ export type SignUpInputs = {
 	password: string
 }
 
-interface U {
-	user: User
-}
-
 function SignUpPage() {
 	const toast = useToast()
-	const loaderData = useLoaderData() as U
 	const navigate = useNavigate()
 	const { dispatch, loading } = useContext(AuthContext)
 	const [data, setData] = useState<SignUpInputs>({
@@ -26,10 +21,6 @@ function SignUpPage() {
 		username: "",
 		password: "",
 	})
-
-	if (loaderData.user) {
-		navigate("/")
-	}
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { id, value } = e.target
@@ -42,9 +33,15 @@ function SignUpPage() {
 
 		try {
 			const res = await axios.post("/auth/signup", data)
-			dispatch({ type: AUTH_ACTION_TYPE.LOGIN_SUCCESS, payload: res.data.body })
+			dispatch({
+				type: AUTH_ACTION_TYPE.LOGIN_SUCCESS,
+				payload: {
+					...res.data.user,
+					token: res.data.token,
+				},
+			})
 			toast({
-				title: "Signed up succesfully",
+				title: "Registered succesfully",
 				status: "success",
 				isClosable: true,
 				duration: 2000,
