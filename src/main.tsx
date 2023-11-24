@@ -7,6 +7,11 @@ import { createBrowserRouter } from "react-router-dom"
 import HomePage from "./pages/index.tsx"
 import SignInPage from "./pages/signin.tsx"
 import SignUpPage from "./pages/signup.tsx"
+import { AuthContextProvider } from "./context/AuthContext.tsx"
+
+const userLoader = async () => {
+	return { user: JSON.parse(localStorage.getItem("user")!) }
+}
 
 export const router = createBrowserRouter([
 	{
@@ -16,16 +21,20 @@ export const router = createBrowserRouter([
 	{
 		path: "/signin",
 		element: <SignInPage />,
+		loader: userLoader,
 	},
 	{
 		path: "/signup",
 		element: <SignUpPage />,
+		loader: userLoader,
 	},
 ])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<ColorModeScript initialColorMode={theme.config.initialColorMode} />
-		<App />
+		<AuthContextProvider>
+			<App />
+		</AuthContextProvider>
 	</React.StrictMode>
 )
