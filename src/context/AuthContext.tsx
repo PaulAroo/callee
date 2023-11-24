@@ -2,7 +2,10 @@ import { ReactNode, createContext, useEffect, useReducer } from "react"
 
 export interface User {
 	username: string
-	password: string
+	id: string
+	phone_number: string | null
+	profile_pic: string | null
+	token: string
 }
 
 interface State {
