@@ -14,32 +14,34 @@ import {
 	BoxProps,
 	FlexProps,
 	Menu,
+	VStack,
+	SimpleGrid,
+	Heading,
 } from "@chakra-ui/react"
-import {
-	FiHome,
-	FiTrendingUp,
-	FiCompass,
-	FiStar,
-	FiSettings,
-} from "react-icons/fi"
-import { IconType } from "react-icons"
+import { FiSearch } from "react-icons/fi"
+// import { IconType } from "react-icons"
 
 import Playground from "./Playground"
 
 import { TbMessagePlus } from "react-icons/tb"
 import { RxDotsVertical } from "react-icons/rx"
-import { FiSearch } from "react-icons/fi"
 import { IoMdCall } from "react-icons/io"
+import { SlCallOut } from "react-icons/sl"
+import { SlCallIn } from "react-icons/sl"
 
 interface LinkItemProps {
 	name: string
-	icon: IconType
+	callDetails: {
+		incoming: boolean
+		duration: string
+		time: string
+	}
 }
 
-interface NavItemProps extends FlexProps {
-	icon: IconType
-	children: React.ReactNode
-}
+// interface NavItemProps extends FlexProps {
+// 	icon: IconType
+// 	children: React.ReactNode
+// }
 
 interface MobileProps extends FlexProps {
 	onOpen: () => void
@@ -51,11 +53,22 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-	{ name: "Home", icon: FiHome },
-	{ name: "Trending", icon: FiTrendingUp },
-	{ name: "Explore", icon: FiCompass },
-	{ name: "Favourites", icon: FiStar },
-	{ name: "Settings", icon: FiSettings },
+	{
+		name: "Lara Mueller",
+		callDetails: {
+			duration: "00:10:34",
+			incoming: false,
+			time: "17:33",
+		},
+	},
+	{
+		name: "Cameron Williamson",
+		callDetails: {
+			duration: "01:10:34",
+			incoming: true,
+			time: "17:33",
+		},
+	},
 ]
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -101,47 +114,65 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 				</HStack>
 				<CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
 			</Flex>
-			{LinkItems.map((link) => (
-				<NavItem key={link.name} icon={link.icon}>
-					{link.name}
-				</NavItem>
-			))}
+			<SimpleGrid pl="0.5rem" gap="0.56rem">
+				<Heading fontSize="1.5rem" fontWeight={400} pl="1.34rem" mt="1rem">
+					Recents
+				</Heading>
+				{LinkItems.map((link) => (
+					<NavItem
+						key={link.name}
+						name={link.name}
+						callDetails={link.callDetails}
+					/>
+				))}
+			</SimpleGrid>
 		</Box>
 	)
 }
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ name, callDetails }: LinkItemProps) => {
+	const { duration, incoming, time } = callDetails
 	return (
 		<Box
-			as="a"
-			href="#"
-			style={{ textDecoration: "none" }}
 			_focus={{ boxShadow: "none" }}
+			_hover={{
+				bg: "linear-gradient(90deg, rgba(182, 28, 255, 0.20) 0%, rgba(182, 28, 255, 0.00) 78.75%)",
+				borderImage:
+					"linear-gradient(90deg, #B61CFF 0%, rgba(182, 28, 255, 0.00) 50%) 1",
+				borderWidth: "1px",
+				borderRight: "0px",
+			}}
+			py="0.67rem"
+			px="1.34rem"
 		>
-			<Flex
-				align="center"
-				p="4"
-				mx="4"
-				borderRadius="lg"
-				role="group"
-				cursor="pointer"
-				_hover={{
-					bg: "cyan.400",
-					color: "white",
-				}}
-				{...rest}
-			>
-				{icon && (
-					<Icon
-						mr="4"
-						fontSize="16"
-						_groupHover={{
-							color: "white",
-						}}
-						as={icon}
-					/>
-				)}
-				{children}
+			<Flex align="center" cursor="pointer" gap="0.45rem">
+				<Avatar
+					sx={{ "--avatar-size": "2.67rem" }}
+					size={"var(--avatar-size)"}
+					src={
+						"https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+					}
+				/>
+				<VStack spacing={0} w="full" align="flex-start">
+					<HStack justifyContent="space-between" w="full">
+						<Text fontWeight={600}>{name}</Text>
+						<Text fontWeight={400} fontSize="0.75rem">
+							{duration}
+						</Text>
+					</HStack>
+					<HStack spacing={0}>
+						<Icon
+							mr="4"
+							fontSize="16"
+							color={incoming ? "brand.blue" : "brand.green"}
+							as={incoming ? SlCallIn : SlCallOut}
+						/>
+
+						<Text fontWeight={400} fontSize="0.75rem">
+							{time}
+						</Text>
+					</HStack>
+				</VStack>
 			</Flex>
 		</Box>
 	)
