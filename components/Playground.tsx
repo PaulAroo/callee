@@ -1,34 +1,25 @@
 import { Badge, Button, HStack, Input, Text } from "@chakra-ui/react"
-import Peer, { MediaConnection } from "peerjs"
+import { MediaConnection } from "peerjs"
 import { useEffect, useRef, useState } from "react"
+import { usePeer } from "../src/context/PeerContext"
 
 const Playground = () => {
-	const [peerId, setPeerId] = useState("")
 	const [callOngoing, setCallOngoing] = useState(false)
 	const [callInstance, setCallInstance] = useState<
 		MediaConnection | undefined
 	>()
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
 
-	const peerInstance = useRef<Peer>(new Peer()).current
+	const { peer, peerId, isConnectionOpen } = usePeer()
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
 	useEffect(() => {
-		peerInstance.on("open", (id) => {
-			console.log("established")
-			setPeerId(id)
-		})
-
-		peerInstance.on("error", (error) => {
-			console.log("peer connection error", error)
-			peerInstance.reconnect()
-		})
-
-		peerInstance.on("call", async (call) => {
+		peer.on("call", async (call) => {
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					audio: true,
 				})
+				// display incoming call screen
 				call.answer(stream)
 				call.on("stream", function (remoteStream) {
 					if (audioRef.current) {
@@ -60,10 +51,10 @@ const Playground = () => {
 				audio: true,
 			})
 
-			if (peerInstance) {
-				const call = peerInstance.call(remotePeerId, stream)
-
+			if (peer) {
+				const call = peer.call(remotePeerId, stream)
 				setCallInstance(call)
+				// display outgoing call stream
 				call.on("stream", (remoteStream) => {
 					setCallOngoing(true)
 					if (audioRef.current) {
@@ -79,19 +70,19 @@ const Playground = () => {
 
 	return (
 		<div>
-			<p>peer ID: {peerId}</p>
+			<p>your peer ID: {peerId}</p>
 			<HStack mt="0.5rem">
 				<Text>peer connection:</Text>
-				<Badge colorScheme={peerInstance.open ? "green" : "red"}>
-					{peerInstance.open ? "open" : "closed"}
+				<Badge colorScheme={peer.open ? "green" : "red"}>
+					{isConnectionOpen ? "open" : "closed"}
 				</Badge>
 			</HStack>
 			<HStack my="1rem">
 				<Input
-					placeholder="remote peer id"
+					placeholder="enter the peer id of who you would like to call"
 					size="md"
 					onChange={(e) => setRemotePeerIdValue(e.target.value)}
-					width={"fit-content"}
+					maxW="25rem"
 					value={remotePeerIdValue}
 					variant="outline"
 				/>

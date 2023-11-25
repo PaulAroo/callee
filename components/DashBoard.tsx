@@ -73,7 +73,7 @@ const LinkItems: Array<LinkItemProps> = [
 	},
 ]
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const DashBoardContent = ({ onClose, ...rest }: SidebarProps) => {
 	return (
 		<Box
 			transition="3s ease"
@@ -250,12 +250,12 @@ const MobileNav = ({ isOpen, onOpen, ...rest }: MobileProps) => {
 	)
 }
 
-const SidebarWithHeader = () => {
+const Dashboard = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	return (
 		<Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-			<SidebarContent
+			<DashBoardContent
 				onClose={() => onClose}
 				display={{ base: "none", md: "block" }}
 			/>
@@ -268,7 +268,7 @@ const SidebarWithHeader = () => {
 				size="full"
 			>
 				<DrawerContent>
-					<SidebarContent onClose={onClose} />
+					<DashBoardContent onClose={onClose} />
 				</DrawerContent>
 			</Drawer>
 			{/* mobilenav */}
@@ -281,4 +281,4 @@ const SidebarWithHeader = () => {
 	)
 }
 
-export default SidebarWithHeader
+export default Dashboard
