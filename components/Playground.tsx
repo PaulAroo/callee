@@ -13,6 +13,10 @@ const Playground = () => {
 	const { peer, peerId, isConnectionOpen } = usePeer()
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 
+	const callChunks = useRef<Blob[]>([])
+	const mediaRecorderRef = useRef<MediaRecorder>()
+	const intervalRef = useRef<number>()
+
 	useEffect(() => {
 		peer.on("call", async (call) => {
 			try {
@@ -42,6 +46,27 @@ const Playground = () => {
 		if (callInstance) {
 			callInstance.close()
 			setCallInstance(undefined)
+		}
+	}
+
+	const upload = (stream: MediaStream) => {
+		mediaRecorderRef.current = new MediaRecorder(stream)
+		mediaRecorderRef.current.ondataavailable = (event) => {
+			console.log(callChunks)
+
+			if (event.data.size > 0) {
+				callChunks.current.push(event.data)
+			}
+		}
+		mediaRecorderRef.current.start(5000)
+
+		intervalRef.current = setInterval(uploadChunks, 5000)
+
+		function uploadChunks() {
+			if (callChunks.current.length === 0) return
+
+			const blob = new Blob(callChunks.current, { type: "audio/mp4" })
+			callChunks.current = []
 		}
 	}
 
