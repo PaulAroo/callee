@@ -1,17 +1,19 @@
 import Peer from "peerjs"
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useRef, useState } from "react"
 import { useSocket } from "./SocketContext"
 
 interface PeerContextInterface {
 	peer: Peer
 	peerId: string | null
 	isConnectionOpen: boolean
+	audioRef: React.RefObject<HTMLAudioElement>
 }
 
 const PeerContext = createContext<PeerContextInterface>({
 	peer: new Peer(),
 	peerId: null,
 	isConnectionOpen: false,
+	audioRef: { current: null },
 })
 
 const usePeer = () => useContext(PeerContext)
@@ -24,6 +26,8 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [peerId, setPeerId] = useState("")
 	const [isConnectionOpen, setIsconnectionOpen] = useState(isOpen)
 
+	const audioRef = useRef<HTMLAudioElement | null>(null)
+
 	useEffect(() => {
 		peer.on("open", (id) => {
 			setPeerId(id)
@@ -35,9 +39,7 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 				})
 			}
 		})
-	}, [])
 
-	useEffect(() => {
 		peer.on("error", (error) => {
 			setIsconnectionOpen(peer.open)
 			console.log("peer connection error", error)
@@ -51,7 +53,10 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 	}, [])
 
 	return (
-		<PeerContext.Provider value={{ peer, peerId: peerId, isConnectionOpen }}>
+		<PeerContext.Provider
+			value={{ peer, peerId: peerId, isConnectionOpen, audioRef }}
+		>
+			<audio ref={audioRef} />
 			{children}
 		</PeerContext.Provider>
 	)
