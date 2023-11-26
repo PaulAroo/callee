@@ -12,21 +12,26 @@ import { useContext, useEffect, useState } from "react"
 import { usePeer } from "../src/context/PeerContext"
 import { AuthContext } from "../src/context/AuthContext"
 import CallScreen from "./CallScreen"
+import { useSocket } from "../src/context/SocketContext"
+
+const CONNECTED_EVENT = "connected"
+const DISCONNECT_EVENT = "disconnected"
 
 const Playground = () => {
+	const { socket } = useSocket()
 	const { user } = useContext(AuthContext)
+	const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
+
 	const [callOngoing, setCallOngoing] = useState(false)
 	const [callInstance, setCallInstance] = useState<
 		MediaConnection | undefined
 	>()
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
-
-	const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
-	// const audioRef = useRef<HTMLAudioElement>(null)
-
 	const [showCallScreen, setShowCallScreen] = useState(false)
-
 	const [remoteMetaData, setRemoteMetaData] = useState<any>()
+
+	const [isSocketConnected, setIsSocketConnected] = useState(false)
+	const [isSocketDisconnected, setIsSocketDisconnected] = useState(false)
 
 	// const callChunks = useRef<Blob[]>([])
 	// const mediaRecorderRef = useRef<MediaRecorder>()
@@ -58,7 +63,41 @@ const Playground = () => {
 				})
 			}
 		})
+
+		if (socket) {
+		}
+
+		return () => {
+			peer.removeListener("call")
+		}
 	}, [])
+
+	useEffect(() => {
+		if (!socket) return
+
+		console.log(socket)
+		socket.connect()
+		console.log(9, socket)
+
+		// Set up event listeners for various socket events:
+		socket.on(CONNECTED_EVENT, onConnect)
+		socket.on(DISCONNECT_EVENT, onDisconnect)
+
+		return () => {
+			socket.off(CONNECTED_EVENT, onConnect)
+			socket.off(DISCONNECT_EVENT, onDisconnect)
+		}
+	}, [socket])
+
+	const onConnect = () => {
+		setIsSocketConnected(true)
+		console.log(6, "connected")
+	}
+
+	const onDisconnect = () => {
+		setIsSocketDisconnected(false)
+		console.log(7, "disconnected")
+	}
 
 	const handleHangUp = () => {
 		if (callInstance) {

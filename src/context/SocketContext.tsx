@@ -4,7 +4,9 @@ import socketio from "socket.io-client"
 import { AuthContext } from "./AuthContext"
 
 const getSocket = (token: string) => {
+	console.log(import.meta.env.VITE_SOCKET_URI)
 	return socketio(import.meta.env.VITE_SOCKET_URI, {
+		autoConnect: false,
 		query: {
 			token,
 		},
@@ -26,10 +28,10 @@ const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [socket, setSocket] = useState<ReturnType<typeof socketio> | null>(null)
 
 	useEffect(() => {
-		if (user) {
-			setSocket(getSocket(user.token))
-		}
-	}, [])
+		console.log(8, user)
+		if (!user) return
+		setSocket(getSocket(user.token))
+	}, [user])
 
 	return (
 		<SocketContext.Provider value={{ socket }}>

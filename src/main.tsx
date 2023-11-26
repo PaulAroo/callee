@@ -9,6 +9,7 @@ import SignInPage from "./pages/signin.tsx"
 import SignUpPage from "./pages/signup.tsx"
 import { AuthContextProvider } from "./context/AuthContext.tsx"
 import { PeerProvider } from "./context/PeerContext.tsx"
+import { SocketProvider } from "./context/SocketContext.tsx"
 
 const userLoader = async () => {
 	const user = JSON.parse(localStorage.getItem("user")!)
@@ -39,9 +40,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<ColorModeScript initialColorMode={theme.config.initialColorMode} />
 		<AuthContextProvider>
-			<PeerProvider>
-				<App />
-			</PeerProvider>
+			<SocketProvider>
+				<PeerProvider>
+					<App />
+				</PeerProvider>
+			</SocketProvider>
 		</AuthContextProvider>
 	</React.StrictMode>
 )

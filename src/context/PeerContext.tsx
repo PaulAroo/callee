@@ -37,6 +37,7 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 				socket.emit("peer_id", { peerId }, (response: any) => {
 					console.log(response)
 				})
+				console.log(5, "notify server of the peer id")
 			}
 		})
 
