@@ -11,6 +11,8 @@ import { AuthContextProvider } from "./context/AuthContext.tsx"
 import { PeerProvider } from "./context/PeerContext.tsx"
 import { SocketProvider } from "./context/SocketContext.tsx"
 
+// TODO: refactor the entire app
+
 const userLoader = async () => {
 	const user = JSON.parse(localStorage.getItem("user")!)
 	if (user) {

@@ -27,7 +27,7 @@ function SignInPage() {
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		// dispatch({ type: AUTH_ACTION_TYPE.LOGIN_START })
+		dispatch({ type: AUTH_ACTION_TYPE.LOGIN_START })
 
 		try {
 			const res = await axios.post(
@@ -50,7 +50,7 @@ function SignInPage() {
 				isClosable: true,
 				duration: 2000,
 				position: "top",
-				variant: "subtle",
+				variant: "solid",
 			})
 			navigate("/")
 		} catch (error) {
