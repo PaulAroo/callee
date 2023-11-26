@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react"
-import SidebarWithHeader from "../../components/Sidebar"
+import Dashboard from "../../components/DashBoard"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 
@@ -15,7 +15,7 @@ function HomePage() {
 
 	if (!user) return <p>redirecting</p>
 
-	return <SidebarWithHeader />
+	return <Dashboard />
 }
 
 export default HomePage

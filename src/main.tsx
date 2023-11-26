@@ -8,6 +8,7 @@ import HomePage from "./pages/index.tsx"
 import SignInPage from "./pages/signin.tsx"
 import SignUpPage from "./pages/signup.tsx"
 import { AuthContextProvider } from "./context/AuthContext.tsx"
+import { PeerProvider } from "./context/PeerContext.tsx"
 
 const userLoader = async () => {
 	const user = JSON.parse(localStorage.getItem("user")!)
@@ -38,7 +39,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<ColorModeScript initialColorMode={theme.config.initialColorMode} />
 		<AuthContextProvider>
-			<App />
+			<PeerProvider>
+				<App />
+			</PeerProvider>
 		</AuthContextProvider>
 	</React.StrictMode>
 )
