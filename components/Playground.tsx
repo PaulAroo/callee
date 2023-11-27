@@ -22,7 +22,7 @@ const SEND_AUDIO_CHUNKS = "audio_chunks"
 const TRANSLATE = "translated_text"
 
 const Playground = () => {
-	const toast = useToast
+	const toast = useToast()
 	const { socket } = useSocket()
 	const { user } = useContext(AuthContext)
 	const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
