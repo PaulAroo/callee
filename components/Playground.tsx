@@ -147,12 +147,15 @@ const Playground = () => {
 			mediaRecorderRef.current.start()
 
 			intervalRef.current = setInterval(() => {
+				console.log("requesting data")
 				mediaRecorderRef.current?.requestData()
 			}, 5000)
 
 			mediaRecorderRef.current.ondataavailable = (event) => {
 				if (event.data.size > 0 && socket?.connected) {
-					socket.emit(SEND_AUDIO_CHUNKS, event.data)
+					console.log(0, event.data)
+					const blob = new Blob([event.data], { type: "audio/wav" })
+					socket.emit(SEND_AUDIO_CHUNKS, blob)
 				}
 			}
 		} catch (error) {
