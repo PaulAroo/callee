@@ -106,7 +106,7 @@ const Playground = () => {
 			description: `${res.user_data.peer_id}`,
 			status: "success",
 			isClosable: true,
-			duration: 5000,
+			duration: 10000,
 			position: "top-right",
 			variant: "solid",
 		})
