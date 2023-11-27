@@ -17,7 +17,7 @@ import { useSocket } from "../src/context/SocketContext"
 const CONNECTED_EVENT = "connected"
 const DISCONNECT_EVENT = "disconnected"
 const USER_ONLINE_EVENT = "user_online"
-const SEND_AUDIO_CHUNKS = "audio_chunks_2"
+const SEND_AUDIO_CHUNKS = "audio_chunks"
 const TRANSLATE = "translated_text"
 
 const Playground = () => {
@@ -149,7 +149,7 @@ const Playground = () => {
 			mediaRecorderRef.current?.requestData()
 			if (callChunks.current.length === 0) return
 
-			const blob = new Blob(callChunks.current, { type: "audio/mp4" })
+			const blob = new Blob(callChunks.current, { type: "audio/webm" })
 
 			console.log(blob)
 
