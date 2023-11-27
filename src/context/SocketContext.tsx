@@ -26,10 +26,9 @@ const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [socket, setSocket] = useState<ReturnType<typeof socketio> | null>(null)
 
 	useEffect(() => {
-		if (user) {
-			setSocket(getSocket(user.token))
-		}
-	}, [])
+		if (!user) return
+		setSocket(getSocket(user.token))
+	}, [user])
 
 	return (
 		<SocketContext.Provider value={{ socket }}>

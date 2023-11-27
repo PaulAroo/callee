@@ -12,21 +12,27 @@ import { useContext, useEffect, useState } from "react"
 import { usePeer } from "../src/context/PeerContext"
 import { AuthContext } from "../src/context/AuthContext"
 import CallScreen from "./CallScreen"
+import { useSocket } from "../src/context/SocketContext"
+
+const CONNECTED_EVENT = "connected"
+const DISCONNECT_EVENT = "disconnected"
+const USER_ONLINE_EVENT = "user_online"
 
 const Playground = () => {
+	const { socket } = useSocket()
 	const { user } = useContext(AuthContext)
+	const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
+
 	const [callOngoing, setCallOngoing] = useState(false)
 	const [callInstance, setCallInstance] = useState<
 		MediaConnection | undefined
 	>()
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
-
-	const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
-	// const audioRef = useRef<HTMLAudioElement>(null)
-
 	const [showCallScreen, setShowCallScreen] = useState(false)
-
 	const [remoteMetaData, setRemoteMetaData] = useState<any>()
+
+	const [, setIsSocketConnected] = useState(false)
+	const [, setIsSocketDisconnected] = useState(false)
 
 	// const callChunks = useRef<Blob[]>([])
 	// const mediaRecorderRef = useRef<MediaRecorder>()
@@ -58,7 +64,43 @@ const Playground = () => {
 				})
 			}
 		})
+
+		if (socket) {
+		}
+
+		return () => {
+			peer.removeListener("call")
+		}
 	}, [])
+
+	useEffect(() => {
+		if (!socket) return
+
+		// Set up event listeners for various socket events:
+		socket.on(CONNECTED_EVENT, onConnect)
+		socket.on(DISCONNECT_EVENT, onDisconnect)
+		socket.on(USER_ONLINE_EVENT, handleUserOnline)
+
+		return () => {
+			socket.off(CONNECTED_EVENT, onConnect)
+			socket.off(DISCONNECT_EVENT, onDisconnect)
+			socket.off(USER_ONLINE_EVENT, handleUserOnline)
+		}
+	}, [socket])
+
+	const onConnect = () => {
+		setIsSocketConnected(true)
+		console.log(6, "connected")
+	}
+
+	const onDisconnect = () => {
+		setIsSocketDisconnected(false)
+		console.log(7, "disconnected")
+	}
+
+	const handleUserOnline = (res: { message: string; user_id: string }) => {
+		console.log(res)
+	}
 
 	const handleHangUp = () => {
 		if (callInstance) {

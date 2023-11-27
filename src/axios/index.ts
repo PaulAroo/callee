@@ -1,5 +1,21 @@
 import axios from "axios"
+import { LocalStorage } from "../utils"
 
-export default axios.create({
+const axiosInstance = axios.create({
 	baseURL: "https://klusterthon2023-production.up.railway.app/api",
 })
+
+axiosInstance.interceptors.request.use(
+	function (config) {
+		const user = LocalStorage.get("user")
+		if (user) {
+			config.headers.Authorization = `Bearer ${user.token}`
+		}
+		return config
+	},
+	function (error) {
+		return Promise.reject(error)
+	}
+)
+
+export default axiosInstance

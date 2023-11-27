@@ -34,9 +34,8 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 			setIsconnectionOpen(true)
 
 			if (socket) {
-				socket.emit("peer_id", { peerId }, (response: any) => {
-					console.log(response)
-				})
+				socket.emit("peer_id", id)
+				console.log(5, "notify server of the peer id")
 			}
 		})
 
@@ -50,7 +49,7 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 				setIsconnectionOpen(peer.open)
 			}
 		})
-	}, [])
+	}, [peer, socket?.connected])
 
 	return (
 		<PeerContext.Provider

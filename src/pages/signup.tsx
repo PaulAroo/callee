@@ -29,31 +29,23 @@ function SignUpPage() {
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		dispatch({ type: AUTH_ACTION_TYPE.LOGIN_START })
 
 		try {
-			const res = await axios.post("/auth/signup", data)
-			dispatch({
-				type: AUTH_ACTION_TYPE.LOGIN_SUCCESS,
-				payload: {
-					...res.data.user,
-					token: res.data.token,
-				},
-			})
+			await axios.post("/auth/signup", data)
 			toast({
 				title: "Registered succesfully",
 				status: "success",
 				isClosable: true,
 				duration: 2000,
 				position: "top",
-				variant: "subtle",
+				variant: "solid",
 			})
-			navigate("/")
+			navigate("/login")
 		} catch (error) {
 			console.log((error as AxiosError).message)
 			toast({
-				title: "Error signing in",
-				description: "Verify inputs or check network connection",
+				title: "Registration failed",
+				description: (error as AxiosError).message,
 				status: "error",
 				isClosable: true,
 				duration: 3000,
