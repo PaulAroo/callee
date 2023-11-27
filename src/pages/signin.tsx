@@ -5,6 +5,7 @@ import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
 import { AuthContext, AUTH_ACTION_TYPE } from "../context/AuthContext"
 import axios from "../axios"
+import { LocalStorage } from "../utils"
 
 export type SignInInputs = {
 	username: string
@@ -37,6 +38,10 @@ function SignInPage() {
 					auth: data,
 				}
 			)
+			LocalStorage.set("user", {
+				...res.data.user,
+				token: res.data.token,
+			})
 			dispatch({
 				type: AUTH_ACTION_TYPE.LOGIN_SUCCESS,
 				payload: {
@@ -52,7 +57,7 @@ function SignInPage() {
 				position: "top",
 				variant: "solid",
 			})
-			navigate("/")
+			navigate("/dashboard")
 		} catch (error) {
 			console.log(error)
 			console.log((error as AxiosError).message)
