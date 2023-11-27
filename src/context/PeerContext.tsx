@@ -43,7 +43,9 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 			setIsconnectionOpen(peer.open)
 			console.log("peer connection error", error)
 			try {
-				peer.reconnect()
+				if (peer.disconnected) {
+					peer.reconnect()
+				}
 			} catch (error) {
 				console.log(error)
 				setIsconnectionOpen(peer.open)

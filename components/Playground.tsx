@@ -8,7 +8,7 @@ import {
 	VStack,
 } from "@chakra-ui/react"
 import { MediaConnection } from "peerjs"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { usePeer } from "../src/context/PeerContext"
 import { AuthContext } from "../src/context/AuthContext"
 import CallScreen from "./CallScreen"
@@ -17,6 +17,8 @@ import { useSocket } from "../src/context/SocketContext"
 const CONNECTED_EVENT = "connected"
 const DISCONNECT_EVENT = "disconnected"
 const USER_ONLINE_EVENT = "user_online"
+const SEND_AUDIO_CHUNKS = "audio_chunks_2"
+const TRANSLATE = "translated_text"
 
 const Playground = () => {
 	const { socket } = useSocket()
@@ -31,27 +33,23 @@ const Playground = () => {
 	const [showCallScreen, setShowCallScreen] = useState(false)
 	const [remoteMetaData, setRemoteMetaData] = useState<any>()
 
-	const [, setIsSocketConnected] = useState(false)
-	const [, setIsSocketDisconnected] = useState(false)
+	// const [isSocketConnected, setIsSocketConnected] = useState(false)
+	// const [isSocketDisconnected, setIsSocketDisconnected] = useState(false)
 
-	// const callChunks = useRef<Blob[]>([])
-	// const mediaRecorderRef = useRef<MediaRecorder>()
-	// const intervalRef = useRef<number>()
-
-	// const localCallStreamRef = useRef<MediaStream>()
+	const callChunks = useRef<Blob[]>([])
+	const mediaRecorderRef = useRef<MediaRecorder>()
+	const intervalRef = useRef<number>()
 
 	useEffect(() => {
 		peer.on("call", (call) => {
 			if (!callOngoing) {
-				// const stream = await navigator.mediaDevices.getUserMedia({
-				// 	audio: true,
-				// })
-				// localCallStreamRef.current = stream
 				setRemoteMetaData(call.metadata)
 				setCallInstance(call)
 				setShowCallScreen(true)
 				call.on("stream", function (remoteStream) {
 					setCallOngoing(true)
+					console.log(1, remoteStream)
+					upload(remoteStream)
 					if (audioRef.current) {
 						audioRef.current.srcObject = remoteStream
 						audioRef.current.autoplay = true
@@ -59,14 +57,8 @@ const Playground = () => {
 						console.log("error")
 					}
 				})
-				call.on("close", () => {
-					setCallOngoing(false)
-				})
 			}
 		})
-
-		if (socket) {
-		}
 
 		return () => {
 			peer.removeListener("call")
@@ -80,21 +72,27 @@ const Playground = () => {
 		socket.on(CONNECTED_EVENT, onConnect)
 		socket.on(DISCONNECT_EVENT, onDisconnect)
 		socket.on(USER_ONLINE_EVENT, handleUserOnline)
+		socket.on(TRANSLATE, (res) => {
+			console.log(0, res)
+		})
 
 		return () => {
 			socket.off(CONNECTED_EVENT, onConnect)
 			socket.off(DISCONNECT_EVENT, onDisconnect)
 			socket.off(USER_ONLINE_EVENT, handleUserOnline)
+			socket.off(TRANSLATE, (res) => {
+				console.log(0, res)
+			})
 		}
 	}, [socket])
 
 	const onConnect = () => {
-		setIsSocketConnected(true)
+		// setIsSocketConnected(true)
 		console.log(6, "connected")
 	}
 
 	const onDisconnect = () => {
-		setIsSocketDisconnected(false)
+		// setIsSocketDisconnected(false)
 		console.log(7, "disconnected")
 	}
 
@@ -108,6 +106,8 @@ const Playground = () => {
 			setShowCallScreen(false)
 			setCallInstance(undefined)
 		}
+		console.log(intervalRef.current)
+		// clearInterval(intervalRef.current)
 	}
 
 	const handlePickup = async () => {
@@ -118,32 +118,48 @@ const Playground = () => {
 				})
 				callInstance.answer(stream)
 				setShowCallScreen(false)
+				callInstance.on("close", () => {
+					setCallOngoing(false)
+					stream.getTracks().forEach((track) => {
+						track.stop()
+					})
+					clearInterval(intervalRef.current)
+				})
 			} catch (error) {
 				console.log(error)
 			}
 		}
 	}
 
-	// const upload = (stream: MediaStream) => {
-	// 	mediaRecorderRef.current = new MediaRecorder(stream)
-	// 	mediaRecorderRef.current.ondataavailable = (event) => {
-	// 		console.log(callChunks)
+	const upload = (stream: MediaStream) => {
+		mediaRecorderRef.current = new MediaRecorder(stream)
+		console.log(mediaRecorderRef.current)
+		mediaRecorderRef.current.ondataavailable = (event) => {
+			if (event.data.size > 0) {
+				console.log("dataaaaaaaaaa", event.data)
+				callChunks.current.push(event.data)
+			}
+		}
+		mediaRecorderRef.current.start()
 
-	// 		if (event.data.size > 0) {
-	// 			callChunks.current.push(event.data)
-	// 		}
-	// 	}
-	// 	mediaRecorderRef.current.start(5000)
+		intervalRef.current = setInterval(uploadChunks, 3000)
 
-	// 	intervalRef.current = setInterval(uploadChunks, 5000)
+		function uploadChunks() {
+			// console.log(0, callChunks.current)
+			mediaRecorderRef.current?.requestData()
+			if (callChunks.current.length === 0) return
 
-	// 	function uploadChunks() {
-	// 		if (callChunks.current.length === 0) return
+			const blob = new Blob(callChunks.current, { type: "audio/mp4" })
 
-	// 		const blob = new Blob(callChunks.current, { type: "audio/mp4" })
-	// 		callChunks.current = []
-	// 	}
-	// }
+			console.log(blob)
+
+			if (socket?.connected) {
+				socket.emit(SEND_AUDIO_CHUNKS, blob)
+			}
+
+			callChunks.current = []
+		}
+	}
 
 	const call = (remotePeerId: string) => async () => {
 		try {
@@ -158,9 +174,11 @@ const Playground = () => {
 					},
 				})
 				setCallInstance(call)
-				// display outgoing call stream
+				// display outgoing call screen
 				call.on("stream", (remoteStream) => {
+					console.log(1, remoteStream)
 					setCallOngoing(true)
+					upload(remoteStream)
 					if (audioRef.current) {
 						audioRef.current.srcObject = remoteStream
 						audioRef.current.play()
@@ -168,6 +186,10 @@ const Playground = () => {
 				})
 				call.on("close", () => {
 					setCallOngoing(false)
+					stream.getTracks().forEach((track) => {
+						track.stop()
+					})
+					clearInterval(intervalRef.current)
 				})
 			}
 		} catch (error) {
