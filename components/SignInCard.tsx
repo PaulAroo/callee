@@ -4,6 +4,7 @@ import {
 	Button,
 	Card,
 	CardBody,
+	CardFooter,
 	CardHeader,
 	Heading,
 	Input,
@@ -14,6 +15,8 @@ import {
 import PasswordInput from "./PasswordInput"
 import { Link } from "react-router-dom"
 import { ChangeEvent, FormEvent } from "react"
+import BrandLogoIcon from "./BrandLogoIcon"
+import BrandLogoText from "./BrandLogoText"
 
 function SignInCard({
 	handleInputchange,
@@ -44,7 +47,7 @@ function SignInCard({
 				</Heading>
 			</CardHeader>
 
-			<CardBody pt="4.19rem" pb="9rem" px={["3rem", "4rem", "7.75rem"]}>
+			<CardBody pt="4.19rem" pb="6rem" px={["3rem", "4rem", "7.75rem"]}>
 				<form onSubmit={handleSubmit}>
 					<InputGroup mb="2.25rem">
 						<Input
@@ -82,6 +85,18 @@ function SignInCard({
 					</Text>
 				</Text>
 			</CardBody>
+
+			<CardFooter
+				fontSize="3rem"
+				gap="0.46rem"
+				alignItems="center"
+				justifyContent="center"
+			>
+				<BrandLogoIcon />
+				<Link to="/">
+					<BrandLogoText />
+				</Link>
+			</CardFooter>
 		</Card>
 	)
 }

@@ -10,6 +10,7 @@ export type SignUpInputs = {
 	email: string
 	username: string
 	password: string
+	language: string
 }
 
 function SignUpPage() {
@@ -20,9 +21,14 @@ function SignUpPage() {
 		email: "",
 		username: "",
 		password: "",
+		language: "",
 	})
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { id, value } = e.target
+		setData({ ...data, [id]: value })
+	}
+	const handleSelectchange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const { id, value } = e.target
 		setData({ ...data, [id]: value })
 	}
@@ -65,6 +71,7 @@ function SignUpPage() {
 				busy={loading}
 				handleInputchange={handleInputChange}
 				handleSubmit={handleSubmit}
+				handleSelectchange={handleSelectchange}
 			/>
 		</SimpleGrid>
 	)

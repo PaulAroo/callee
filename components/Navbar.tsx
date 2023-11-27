@@ -10,8 +10,12 @@ function Navbar() {
 		<nav>
 			<Container maxW="container.xl" p={0}>
 				<HStack px="2.47rem" py="2.34rem" justify="space-between">
-					<ReactRouterLink to="">
-						<HStack spacing="0.46rem" color="brand.purple.100">
+					<ReactRouterLink to="/">
+						<HStack
+							spacing="0.46rem"
+							color="brand.purple.100"
+							fontSize="6.75rem"
+						>
 							<BrandLogoIcon />
 							<BrandLogoText />
 						</HStack>

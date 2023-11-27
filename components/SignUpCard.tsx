@@ -5,25 +5,31 @@ import {
 	Button,
 	Card,
 	CardBody,
+	CardFooter,
 	CardHeader,
 	Heading,
 	Input,
 	InputGroup,
 	InputRightElement,
+	Select,
 	Text,
 } from "@chakra-ui/react"
 import PasswordInput from "./PasswordInput"
 import { Link } from "react-router-dom"
 import { ChangeEvent, FormEvent } from "react"
+import BrandLogoIcon from "./BrandLogoIcon"
+import BrandLogoText from "./BrandLogoText"
 
 function SignUpCard({
 	handleInputchange,
+	handleSelectchange,
 	handleSubmit,
 	busy,
 }: {
 	busy: boolean
 	handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 	handleInputchange: (e: ChangeEvent<HTMLInputElement>) => void
+	handleSelectchange: (e: ChangeEvent<HTMLSelectElement>) => void
 }) {
 	return (
 		<Card
@@ -45,7 +51,7 @@ function SignUpCard({
 				</Heading>
 			</CardHeader>
 
-			<CardBody pt="4.19rem" pb="9rem" px={["3rem", "4rem", "7.75rem"]}>
+			<CardBody pt="4.19rem" pb="6rem" px={["3rem", "4rem", "7.75rem"]}>
 				<form onSubmit={handleSubmit}>
 					<InputGroup mb="2.25rem">
 						<Input
@@ -78,6 +84,19 @@ function SignUpCard({
 						</InputRightElement>
 					</InputGroup>
 					<PasswordInput handleInputchange={handleInputchange} />
+					<Select
+						id="language"
+						colorScheme="gray"
+						mt="2.25rem"
+						focusBorderColor="brand.purple.100"
+						variant="flushed"
+						placeholder="Select preferred language"
+						onChange={handleSelectchange}
+					>
+						<option value="english">English</option>
+						<option value="french">French</option>
+						<option value="german">German</option>
+					</Select>
 					<Button
 						type="submit"
 						fontSize="xs"
@@ -98,6 +117,18 @@ function SignUpCard({
 					</Text>
 				</Text>
 			</CardBody>
+
+			<CardFooter
+				fontSize="3rem"
+				gap="0.46rem"
+				alignItems="center"
+				justifyContent="center"
+			>
+				<BrandLogoIcon />
+				<Link to="/">
+					<BrandLogoText />
+				</Link>
+			</CardFooter>
 		</Card>
 	)
 }

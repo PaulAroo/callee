@@ -2,8 +2,8 @@ function BrandLogoIcon() {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width="29"
-			height="32"
+			width="0.3em"
+			height="0.5em"
 			viewBox="0 0 29 32"
 			fill="none"
 		>

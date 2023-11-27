@@ -2,8 +2,8 @@ function BrandLogoText() {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width="108"
-			height="28"
+			width="1em"
+			height="0.26em"
 			viewBox="0 0 108 28"
 			fill="none"
 		>
