@@ -51,7 +51,7 @@ const PeerProvider: React.FC<{ children: React.ReactNode }> = ({
 				setIsconnectionOpen(peer.open)
 			}
 		})
-	}, [peer, socket?.connected])
+	}, [peer.disconnected, socket?.connected])
 
 	return (
 		<PeerContext.Provider

@@ -6,6 +6,7 @@ import {
 	Input,
 	Text,
 	VStack,
+	useToast,
 } from "@chakra-ui/react"
 import { MediaConnection } from "peerjs"
 import { useContext, useEffect, useRef, useState } from "react"
@@ -21,6 +22,7 @@ const SEND_AUDIO_CHUNKS = "audio_chunks"
 const TRANSLATE = "translated_text"
 
 const Playground = () => {
+	const toast = useToast
 	const { socket } = useSocket()
 	const { user } = useContext(AuthContext)
 	const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
@@ -32,6 +34,7 @@ const Playground = () => {
 	const [remotePeerIdValue, setRemotePeerIdValue] = useState("")
 	const [showCallScreen, setShowCallScreen] = useState(false)
 	const [remoteMetaData, setRemoteMetaData] = useState<any>()
+	const [translatedText, setTranslatedText] = useState("")
 
 	// const [isSocketConnected, setIsSocketConnected] = useState(false)
 	// const [isSocketDisconnected, setIsSocketDisconnected] = useState(false)
@@ -48,8 +51,7 @@ const Playground = () => {
 				setShowCallScreen(true)
 				call.on("stream", function (remoteStream) {
 					setCallOngoing(true)
-					console.log(1, remoteStream)
-					upload(remoteStream)
+					uploadStreamToTranslate(remoteStream)
 					if (audioRef.current) {
 						audioRef.current.srcObject = remoteStream
 						audioRef.current.autoplay = true
@@ -72,32 +74,42 @@ const Playground = () => {
 		socket.on(CONNECTED_EVENT, onConnect)
 		socket.on(DISCONNECT_EVENT, onDisconnect)
 		socket.on(USER_ONLINE_EVENT, handleUserOnline)
-		socket.on(TRANSLATE, (res) => {
-			console.log(0, res)
-		})
+		socket.on(TRANSLATE, onTranslate)
 
 		return () => {
 			socket.off(CONNECTED_EVENT, onConnect)
 			socket.off(DISCONNECT_EVENT, onDisconnect)
 			socket.off(USER_ONLINE_EVENT, handleUserOnline)
-			socket.off(TRANSLATE, (res) => {
-				console.log(0, res)
-			})
+			socket.off(TRANSLATE, onTranslate)
 		}
 	}, [socket])
 
 	const onConnect = () => {
 		// setIsSocketConnected(true)
-		console.log(6, "connected")
+		console.log("connected")
 	}
 
 	const onDisconnect = () => {
 		// setIsSocketDisconnected(false)
-		console.log(7, "disconnected")
+		console.log("disconnected")
 	}
 
-	const handleUserOnline = (res: { message: string; user_id: string }) => {
+	const onTranslate = (response: string) => {
+		console.log(response)
+		setTranslatedText(response)
+	}
+
+	const handleUserOnline = (res: any) => {
 		console.log(res)
+		toast({
+			title: `${res.message}`,
+			description: `${res.user_data.peer_id}`,
+			status: "success",
+			isClosable: true,
+			duration: 5000,
+			position: "top-right",
+			variant: "solid",
+		})
 	}
 
 	const handleHangUp = () => {
@@ -106,8 +118,6 @@ const Playground = () => {
 			setShowCallScreen(false)
 			setCallInstance(undefined)
 		}
-		console.log(intervalRef.current)
-		// clearInterval(intervalRef.current)
 	}
 
 	const handlePickup = async () => {
@@ -131,12 +141,10 @@ const Playground = () => {
 		}
 	}
 
-	const upload = (stream: MediaStream) => {
+	const uploadStreamToTranslate = (stream: MediaStream) => {
 		mediaRecorderRef.current = new MediaRecorder(stream)
-		console.log(mediaRecorderRef.current)
 		mediaRecorderRef.current.ondataavailable = (event) => {
 			if (event.data.size > 0) {
-				console.log("dataaaaaaaaaa", event.data)
 				callChunks.current.push(event.data)
 			}
 		}
@@ -145,7 +153,6 @@ const Playground = () => {
 		intervalRef.current = setInterval(uploadChunks, 3000)
 
 		function uploadChunks() {
-			// console.log(0, callChunks.current)
 			mediaRecorderRef.current?.requestData()
 			if (callChunks.current.length === 0) return
 
@@ -176,9 +183,8 @@ const Playground = () => {
 				setCallInstance(call)
 				// display outgoing call screen
 				call.on("stream", (remoteStream) => {
-					console.log(1, remoteStream)
 					setCallOngoing(true)
-					upload(remoteStream)
+					uploadStreamToTranslate(remoteStream)
 					if (audioRef.current) {
 						audioRef.current.srcObject = remoteStream
 						audioRef.current.play()
@@ -216,6 +222,7 @@ const Playground = () => {
 				<Text>
 					call ongoing {remoteCallerName ? `with ${remoteCallerName}` : ""}{" "}
 				</Text>
+				<Text>{translatedText}</Text>
 				<Button
 					my="1rem"
 					isDisabled={!callOngoing}
@@ -258,16 +265,6 @@ const Playground = () => {
 					call
 				</Button>
 			</HStack>
-			{/* <Button
-				my="1rem"
-				isDisabled={!callOngoing}
-				colorScheme="brand.purple"
-				size={"sm"}
-				variant={"outline"}
-				onClick={hangUp}
-			>
-				hang up
-			</Button> */}
 		</Box>
 	)
 }

@@ -96,6 +96,7 @@ function SignUpCard({
 						<option value="english">English</option>
 						<option value="french">French</option>
 						<option value="german">German</option>
+						<option value="yoruba">Yoruba</option>
 					</Select>
 					<Button
 						type="submit"

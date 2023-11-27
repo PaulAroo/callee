@@ -33,16 +33,6 @@ interface LinkItemProps {
 	}
 }
 
-// interface NavItemProps extends FlexProps {
-// 	icon: IconType
-// 	children: React.ReactNode
-// }
-
-// interface MobileProps extends FlexProps {
-// 	onOpen: () => void
-// 	isOpen: boolean
-// }
-
 interface SidebarProps extends BoxProps {
 	onClose: () => void
 }
@@ -169,74 +159,6 @@ const NavItem = ({ name, callDetails }: LinkItemProps) => {
 	)
 }
 
-// const MobileNav = ({ isOpen, onOpen, ...rest }: MobileProps) => {
-// 	const { user } = useContext(AuthContext)
-// 	return (
-// 		<Flex
-// 			ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }}
-// 			px={{ base: "0.89rem" }}
-// 			height="4.45763rem"
-// 			alignItems="center"
-// 			borderBottomWidth="1px"
-// 			borderBottomColor="brand.darkgrey"
-// 			justifyContent="space-between"
-// 			bg="brand.dark"
-// 			{...rest}
-// 		>
-// 			<HStack spacing="0.88rem" fontWeight={600}>
-// 				<Avatar
-// 					sx={{ "--avatar-size": "2.2rem" }}
-// 					size={"var(--avatar-size)"}
-// 					src={""}
-// 				/>
-// 				<Text>{user?.username}</Text>
-// 			</HStack>
-
-// 			<HStack>
-// 				<IconButton
-// 					fontSize={"1.33731rem"}
-// 					variant="outline"
-// 					rounded="full"
-// 					borderWidth="4px"
-// 					borderColor="brand.purple.200"
-// 					aria-label="open menu"
-// 					icon={<IoMdCall />}
-// 					mr={{ md: "1.5rem", lg: "3rem", xl: "6rem" }}
-// 				/>
-// 				<IconButton
-// 					fontSize={"1.33731rem"}
-// 					variant="ghost"
-// 					aria-label="open menu"
-// 					icon={<FiSearch />}
-// 				/>
-// 				<Menu>
-// 					<HStack>
-// 						<IconButton
-// 							fontSize={"1.33731rem"}
-// 							variant="ghost"
-// 							aria-label="open menu"
-// 							icon={<RxDotsVertical />}
-// 						/>
-// 						{/* <Box display={{ base: "none", md: "flex" }}>
-// 								<FiChevronDown />
-// 							</Box> */}
-// 					</HStack>
-// 					{/* <MenuList
-// 							bg={useColorModeValue("white", "gray.900")}
-// 							borderColor={useColorModeValue("gray.200", "gray.700")}
-// 						>
-// 							<MenuItem>Profile</MenuItem>
-// 							<MenuItem>Settings</MenuItem>
-// 							<MenuItem>Billing</MenuItem>
-// 							<MenuDivider />
-// 							<MenuItem>Sign out</MenuItem>
-// 						</MenuList> */}
-// 				</Menu>
-// 			</HStack>
-// 		</Flex>
-// 	)
-// }
-
 const Dashboard = () => {
 	const { isOpen, onClose } = useDisclosure()
 
@@ -258,10 +180,8 @@ const Dashboard = () => {
 					<DashBoardContent onClose={onClose} />
 				</DrawerContent>
 			</Drawer>
-			{/* <MobileNav onOpen={onOpen} isOpen={isOpen} /> */}
 			<Box ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }}>
 				<Playground />
-				{/* <CallScreen variant="incoming" /> */}
 			</Box>
 		</Box>
 	)
