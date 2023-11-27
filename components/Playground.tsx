@@ -16,6 +16,7 @@ import { useSocket } from "../src/context/SocketContext"
 
 const CONNECTED_EVENT = "connected"
 const DISCONNECT_EVENT = "disconnected"
+const USER_ONLINE_EVENT = "user_online"
 
 const Playground = () => {
 	const { socket } = useSocket()
@@ -75,17 +76,15 @@ const Playground = () => {
 	useEffect(() => {
 		if (!socket) return
 
-		console.log(socket)
-		socket.connect()
-		console.log(9, socket)
-
 		// Set up event listeners for various socket events:
 		socket.on(CONNECTED_EVENT, onConnect)
 		socket.on(DISCONNECT_EVENT, onDisconnect)
+		socket.on(USER_ONLINE_EVENT, handleUserOnline)
 
 		return () => {
 			socket.off(CONNECTED_EVENT, onConnect)
 			socket.off(DISCONNECT_EVENT, onDisconnect)
+			socket.off(USER_ONLINE_EVENT, handleUserOnline)
 		}
 	}, [socket])
 
@@ -97,6 +96,10 @@ const Playground = () => {
 	const onDisconnect = () => {
 		setIsSocketDisconnected(false)
 		console.log(7, "disconnected")
+	}
+
+	const handleUserOnline = (res: { message: string; user_id: string }) => {
+		console.log(res)
 	}
 
 	const handleHangUp = () => {
