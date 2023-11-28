@@ -72,7 +72,7 @@ const DashBoardContent = ({ onClose, ...rest }: SidebarProps) => {
 				height="4.45763rem"
 				alignItems="center"
 				justifyContent="space-between"
-				bg="brand.dark"
+				bg="brand.dark.200"
 			>
 				<Avatar
 					sx={{ "--avatar-size": "2.2rem" }}

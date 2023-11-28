@@ -10,34 +10,21 @@ import {
 } from "@chakra-ui/react"
 import { RxDotsVertical } from "react-icons/rx"
 import { TbMessagePlus } from "react-icons/tb"
-import SideBarItem, { SideBarItemData } from "./SideBarItem"
+import SideBarItem from "./SideBarItem"
 import { User } from "../../src/context/AuthContext"
 
 interface SidebarProps extends BoxProps {
 	handleClick: (data: User) => void
 	users: User[]
+	selected_user: User
 }
 
-const LinkItems: Array<SideBarItemData> = [
-	{
-		name: "Lara",
-		callDetails: {
-			duration: "00:10:34",
-			incoming: false,
-			time: "17:33",
-		},
-	},
-	{
-		name: "Cameron",
-		callDetails: {
-			duration: "01:10:34",
-			incoming: true,
-			time: "17:33",
-		},
-	},
-]
+function SideBar({ handleClick, selected_user, users }: SidebarProps) {
+	const isSelected = (id: string) => {
+		if (selected_user.id === id) return true
+		return false
+	}
 
-function SideBar({ handleClick, users }: SidebarProps) {
 	return (
 		<Box
 			transition="3s ease"
@@ -52,7 +39,7 @@ function SideBar({ handleClick, users }: SidebarProps) {
 				height="4.45763rem"
 				alignItems="center"
 				justifyContent="space-between"
-				bg="brand.dark"
+				bg="brand.dark.200"
 			>
 				<Avatar
 					sx={{ "--avatar-size": "2.2rem" }}
@@ -78,10 +65,15 @@ function SideBar({ handleClick, users }: SidebarProps) {
 			</Flex>
 			<SimpleGrid pl="0.5rem" gap="0.56rem">
 				<Heading fontSize="1.5rem" fontWeight={400} pl="1.34rem" mt="1rem">
-					Recents
+					Users
 				</Heading>
 				{users.map((user) => (
-					<SideBarItem key={user.id} data={user} handleClick={handleClick} />
+					<SideBarItem
+						selected={isSelected(user.id)}
+						key={user.id}
+						data={user}
+						handleClick={() => handleClick(user)}
+					/>
 				))}
 			</SimpleGrid>
 		</Box>
