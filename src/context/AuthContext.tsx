@@ -7,6 +7,7 @@ export interface User {
 	phone_number: string | null
 	profile_pic: string | null
 	token: string
+	is_online: boolean
 }
 
 interface State {
