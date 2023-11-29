@@ -1,19 +1,23 @@
-import { isRouteErrorResponse, useRouteError } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { Button, SimpleGrid, VStack } from "@chakra-ui/react"
+
+import { LocalStorage } from "../utils"
 
 export default function ErrorPage() {
-	const error = useRouteError()
+	const navigate = useNavigate()
 
-	if (!isRouteErrorResponse(error)) {
-		return null
+	const goBackHome = () => {
+		LocalStorage.set("user", null)
+		navigate("/")
 	}
 
 	return (
-		<div id="error-page">
-			<h1>Oops!</h1>
-			<p>Sorry, an unexpected error has occurred.</p>
-			<p>
-				<i>{error.statusText || error.status}</i>
-			</p>
-		</div>
+		<SimpleGrid minH="100vh" id="error-page" placeItems="center">
+			<VStack>
+				<h1>Oops!</h1>
+				<p>Sorry, an unexpected error has occurred.</p>
+				<Button onClick={goBackHome}>return to homepage</Button>
+			</VStack>
+		</SimpleGrid>
 	)
 }
