@@ -35,11 +35,6 @@ const Playground = () => {
 	const [showCallScreen, setShowCallScreen] = useState(false)
 	const [remoteMetaData, setRemoteMetaData] = useState<any>()
 	const [translatedText, setTranslatedText] = useState("")
-
-	// const [isSocketConnected, setIsSocketConnected] = useState(false)
-	// const [isSocketDisconnected, setIsSocketDisconnected] = useState(false)
-
-	// const callChunks = useRef<Blob[]>([])
 	const mediaRecorderRef = useRef<MediaRecorder>()
 	const intervalRef = useRef<number>()
 
@@ -161,31 +156,6 @@ const Playground = () => {
 		} catch (error) {
 			console.log("Media Recording Error:", error)
 		}
-
-		// mediaRecorderRef.current = new MediaRecorder(stream)
-		// mediaRecorderRef.current.ondataavailable = (event) => {
-		// 	if (event.data.size > 0) {
-		// 		callChunks.current.push(event.data)
-		// 	}
-		// }
-		// mediaRecorderRef.current.start()
-
-		// intervalRef.current = setInterval(uploadChunks, 3000)
-
-		// function uploadChunks() {
-		// 	mediaRecorderRef.current?.requestData()
-		// 	if (callChunks.current.length === 0) return
-
-		// 	const blob = new Blob(callChunks.current, { type: "audio/webm" })
-
-		// 	console.log(blob)
-
-		// 	if (socket?.connected) {
-		// 		socket.emit(SEND_AUDIO_CHUNKS, blob)
-		// 	}
-
-		// 	callChunks.current = []
-		// }
 	}
 
 	const call = (remotePeerId: string) => async () => {

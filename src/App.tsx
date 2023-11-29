@@ -7,9 +7,12 @@ import SignInPage from "./pages/signin"
 import SignUpPage from "./pages/signup"
 import axiosInstance from "./axios"
 import DashboardCopy from "../components/Dashboard"
+import ErrorPage from "./pages/Error"
+import { User } from "./context/AuthContext"
 
 const userLoader = async () => {
 	const user = JSON.parse(localStorage.getItem("user")!)
+	console.log(user)
 	if (user) {
 		return redirect("/dashboard")
 	}
@@ -36,18 +39,21 @@ export const router = createBrowserRouter([
 		element: <DashboardCopy />,
 		loader: async () => {
 			const user = JSON.parse(localStorage.getItem("user")!)
-			console.log(user)
 			if (!user) return redirect("/")
 			else {
 				try {
-					const allUsersData = await axiosInstance.get("/user/all_users")
-					return { userData: allUsersData.data }
+					const allUsersData =
+						await axiosInstance.get<User[]>("/user/all_users")
+					// TODO: filter data
+					const userData = allUsersData.data.filter((u) => u.id !== user.id)
+					return { userData }
 				} catch (error) {
 					console.log("error fetching all users", error)
 					return null
 				}
 			}
 		},
+		errorElement: <ErrorPage />,
 	},
 ])
 

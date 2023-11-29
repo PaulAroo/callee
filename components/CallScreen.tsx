@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { IoMdCall, IoMdClose } from "react-icons/io"
 
-type Variant = "incoming" | "outgoing" | "ongoing"
+type Variant = "incoming" | "outgoing" | "ongoing" | ""
 
 function CallScreen({
 	remoteCallerName,
@@ -54,6 +54,32 @@ function CallScreen({
 						onClick={handleHangUp}
 					/>
 				</HStack>
+			)
+		} else if (variant === "ongoing") {
+			return (
+				<IconButton
+					aria-label="reject call"
+					rounded="full"
+					icon={<IoMdClose />}
+					fontSize="2.25rem"
+					padding="1rem"
+					height="auto"
+					bg="brand.red"
+					onClick={handleHangUp}
+				/>
+			)
+		} else if (variant === "outgoing") {
+			return (
+				<IconButton
+					aria-label="reject call"
+					rounded="full"
+					icon={<IoMdClose />}
+					fontSize="2.25rem"
+					padding="1rem"
+					height="auto"
+					bg="brand.red"
+					onClick={handleHangUp}
+				/>
 			)
 		}
 	}

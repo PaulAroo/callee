@@ -4,7 +4,6 @@ import App from "./App.tsx"
 import { ColorModeScript } from "@chakra-ui/react"
 import theme from "../lib/styles/theme.ts"
 import { AuthContextProvider } from "./context/AuthContext.tsx"
-import { PeerProvider } from "./context/PeerContext.tsx"
 import { SocketProvider } from "./context/SocketContext.tsx"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -12,9 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 		<ColorModeScript initialColorMode={theme.config.initialColorMode} />
 		<AuthContextProvider>
 			<SocketProvider>
-				<PeerProvider>
-					<App />
-				</PeerProvider>
+				<App />
 			</SocketProvider>
 		</AuthContextProvider>
 	</React.StrictMode>

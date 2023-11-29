@@ -5,7 +5,7 @@ import { RxDotsVertical } from "react-icons/rx"
 interface DashboardHeaderProps {
 	name: string
 	peer_id: string
-	onCall: (peer_id: string) => void
+	onCall: (() => Promise<void>) | undefined
 	online: boolean
 }
 
@@ -15,11 +15,6 @@ const DashboardHeader = ({
 	peer_id,
 	online,
 }: DashboardHeaderProps) => {
-	const call = () => {
-		if (peer_id) {
-			onCall(peer_id)
-		}
-	}
 	return (
 		<Flex
 			px={{ base: "0.89rem" }}
@@ -50,7 +45,7 @@ const DashboardHeader = ({
 					isDisabled={!online && !peer_id}
 					icon={<IoMdCall />}
 					mr={{ md: "1.5rem", lg: "3rem", xl: "6rem" }}
-					onClick={call}
+					onClick={onCall}
 				/>
 				<IconButton
 					fontSize={"1.33731rem"}
