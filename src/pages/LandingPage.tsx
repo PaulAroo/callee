@@ -7,7 +7,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react"
-import Navbar from "../../components/Navbar"
+import Navbar from "../components/Navbar"
 
 import section1ImageUrl from "../assets/callee_nobg.png"
 import { useNavigate } from "react-router-dom"

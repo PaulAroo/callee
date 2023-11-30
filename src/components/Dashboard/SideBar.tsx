@@ -11,7 +11,7 @@ import {
 import { RxDotsVertical } from "react-icons/rx"
 import { TbMessagePlus } from "react-icons/tb"
 import SideBarItem from "./SideBarItem"
-import { User } from "../../src/context/AuthContext"
+import { User } from "../../context/AuthContext"
 
 interface SidebarProps extends BoxProps {
 	handleClick: (data: User) => void

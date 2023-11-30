@@ -1,5 +1,5 @@
 import { SimpleGrid, useToast } from "@chakra-ui/react"
-import SignInCard from "../../components/SignInCard"
+import SignInCard from "../components/SignInCard"
 import { ChangeEvent, FormEvent, useContext, useState } from "react"
 import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"

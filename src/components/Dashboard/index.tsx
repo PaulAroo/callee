@@ -11,8 +11,8 @@ import { useLoaderData } from "react-router-dom"
 import Peer, { MediaConnection } from "peerjs"
 import SideBar from "./SideBar"
 import DashBoardContent from "./DashboardContent"
-import { User } from "../../src/context/AuthContext"
-import { useSocket } from "../../src/context/SocketContext"
+import { User } from "../../context/AuthContext"
+import { useSocket } from "../../context/SocketContext"
 
 interface AllUsers {
 	userData: Array<User>
@@ -29,11 +29,10 @@ const DISCONNECT_EVENT = "disconnected"
 const USER_ONLINE_EVENT = "user_online"
 const SEND_AUDIO_CHUNKS = "audio_chunks"
 
-const DashboardCopy = () => {
+const Dashboard = () => {
 	const toast = useToast()
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const data = useLoaderData() as AllUsers
-	// const data = data as AllUsers
 	const boxRef = useRef<HTMLDivElement | null>(null)
 
 	const [allUsers, setAllUsers] = useState(data?.userData)
@@ -63,7 +62,6 @@ const DashboardCopy = () => {
 
 	useEffect(() => {
 		peer.on("open", (id) => {
-			// setPeerId(id)
 			setIsconnectionOpen(true)
 
 			if (socket) {
@@ -252,4 +250,4 @@ const DashboardCopy = () => {
 	)
 }
 
-export default DashboardCopy
+export default Dashboard

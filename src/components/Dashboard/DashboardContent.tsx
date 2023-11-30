@@ -2,7 +2,7 @@ import Peer, { MediaConnection } from "peerjs"
 import { Box, BoxProps } from "@chakra-ui/react"
 
 import DashboardHeader from "./DashboardHeader"
-import { User } from "../../src/context/AuthContext"
+import { User } from "../../context/AuthContext"
 import { useState } from "react"
 import CallScreen from "../CallScreen"
 

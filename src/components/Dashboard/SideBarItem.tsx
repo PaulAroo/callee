@@ -1,5 +1,5 @@
 import { Avatar, Button, HStack, Text, VStack } from "@chakra-ui/react"
-import { User } from "../../src/context/AuthContext"
+import { User } from "../../context/AuthContext"
 
 export interface SideBarItemData {
 	name: string

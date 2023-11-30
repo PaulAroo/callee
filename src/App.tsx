@@ -1,13 +1,13 @@
 import { ChakraBaseProvider } from "@chakra-ui/react"
 import { RouterProvider, createBrowserRouter, redirect } from "react-router-dom"
 
-import theme from "../lib/styles/theme"
-import LandingPage from "./pages/LandingPage"
+import axiosInstance from "./axios"
+import ErrorPage from "./pages/Error"
+import theme from "./lib/styles/theme"
 import SignInPage from "./pages/signin"
 import SignUpPage from "./pages/signup"
-import axiosInstance from "./axios"
-import DashboardCopy from "../components/Dashboard"
-import ErrorPage from "./pages/Error"
+import LandingPage from "./pages/LandingPage"
+import Dashboard from "./components/Dashboard"
 import { User } from "./context/AuthContext"
 
 const userLoader = async () => {
@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
 	},
 	{
 		path: "/dashboard",
-		element: <DashboardCopy />,
+		element: <Dashboard />,
 		loader: async () => {
 			const user = JSON.parse(localStorage.getItem("user")!)
 			if (!user) return redirect("/")
@@ -44,7 +44,6 @@ export const router = createBrowserRouter([
 				try {
 					const allUsersData =
 						await axiosInstance.get<User[]>("/user/all_users")
-					// TODO: filter data
 					const userData = allUsersData.data.filter((u) => u.id !== user.id)
 					return { userData }
 				} catch (error) {
