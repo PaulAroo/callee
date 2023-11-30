@@ -1,12 +1,12 @@
 import Peer, { MediaConnection } from "peerjs"
-import { Box } from "@chakra-ui/react"
+import { Box, BoxProps } from "@chakra-ui/react"
 
 import DashboardHeader from "./DashboardHeader"
 import { User } from "../../src/context/AuthContext"
 import { useState } from "react"
 import CallScreen from "../CallScreen"
 
-interface DashBoardContentProps {
+interface DashBoardContentProps extends BoxProps {
 	data: User
 	peer: Peer
 	uploadStreamToTranslate: (stream: MediaStream) => void
@@ -20,6 +20,8 @@ interface DashBoardContentProps {
 		React.SetStateAction<MediaConnection | undefined>
 	>
 	callInstance: MediaConnection | undefined
+	translatedText: string
+	onClose: () => void
 }
 
 const DashBoardContent = ({
@@ -34,10 +36,10 @@ const DashBoardContent = ({
 	callInstance,
 	setCallInstance,
 	callOngoing,
+	translatedText,
+	onClose,
+	...rest
 }: DashBoardContentProps) => {
-	// const [callInstance, setCallInstance] = useState<
-	// 	MediaConnection | undefined
-	// >()
 	const [callOutgoing, setCallOutgoing] = useState(false)
 	const [callerName, setCallerName] = useState(remoteCallerName)
 
@@ -130,6 +132,7 @@ const DashBoardContent = ({
 					handleHangUp={handleHangUp}
 					variant={variant}
 					remoteCallerName={callerName}
+					translatedText={translatedText}
 				/>
 			)
 		} else {
@@ -139,13 +142,14 @@ const DashBoardContent = ({
 					peer_id={data.peer_id}
 					name={data.username}
 					onCall={call(data.peer_id)}
+					onClose={onClose}
 				/>
 			)
 		}
 	}
 
 	return (
-		<Box ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }}>
+		<Box ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }} {...rest}>
 			{renderContent()}
 		</Box>
 	)

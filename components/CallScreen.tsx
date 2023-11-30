@@ -16,11 +16,13 @@ function CallScreen({
 	variant,
 	handleHangUp,
 	handlePickup,
+	translatedText,
 }: {
 	remoteCallerName: string
 	variant: Variant
 	handlePickup: () => void
 	handleHangUp: () => void
+	translatedText: string
 }) {
 	const callStatus =
 		variant === "incoming"
@@ -57,16 +59,19 @@ function CallScreen({
 			)
 		} else if (variant === "ongoing") {
 			return (
-				<IconButton
-					aria-label="reject call"
-					rounded="full"
-					icon={<IoMdClose />}
-					fontSize="2.25rem"
-					padding="1rem"
-					height="auto"
-					bg="brand.red"
-					onClick={handleHangUp}
-				/>
+				<VStack>
+					<Text>{translatedText}</Text>
+					<IconButton
+						aria-label="reject call"
+						rounded="full"
+						icon={<IoMdClose />}
+						fontSize="2.25rem"
+						padding="1rem"
+						height="auto"
+						bg="brand.red"
+						onClick={handleHangUp}
+					/>
+				</VStack>
 			)
 		} else if (variant === "outgoing") {
 			return (

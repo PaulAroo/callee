@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react"
-import { Box, useToast } from "@chakra-ui/react"
+import {
+	Box,
+	Drawer,
+	DrawerContent,
+	useDisclosure,
+	useToast,
+} from "@chakra-ui/react"
 import { useLoaderData } from "react-router-dom"
 
 import Peer, { MediaConnection } from "peerjs"
@@ -25,18 +31,20 @@ const SEND_AUDIO_CHUNKS = "audio_chunks"
 
 const DashboardCopy = () => {
 	const toast = useToast()
+	const { isOpen, onOpen, onClose } = useDisclosure()
 	const data = useLoaderData() as AllUsers
 	// const data = data as AllUsers
+	const boxRef = useRef<HTMLDivElement | null>(null)
 
 	const [allUsers, setAllUsers] = useState(data?.userData)
 	const [currentUser, setCurrentUser] = useState<User>(data.userData[0])
 
 	const handleClick = (data: User) => {
 		setCurrentUser(data)
+		console.log(data)
+		onOpen()
 	}
 
-	// #########################
-	// const { peer, peerId, isConnectionOpen, audioRef } = usePeer()
 	const { socket } = useSocket()
 	const [callOngoing, setCallOngoing] = useState(false)
 	const [callInstance, setCallInstance] = useState<
@@ -47,7 +55,7 @@ const DashboardCopy = () => {
 	const [remoteCallerName, setRemoteCallerName] = useState<any>()
 	const [translatedText, setTranslatedText] = useState("")
 
-	const [isConnectionOpen, setIsconnectionOpen] = useState(false)
+	const [, setIsconnectionOpen] = useState(false)
 
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 	const mediaRecorderRef = useRef<MediaRecorder>()
@@ -153,7 +161,6 @@ const DashboardCopy = () => {
 
 		toast({
 			title: `${res.message}`,
-			description: `${res.user_data.peer_id}`,
 			status: "success",
 			isClosable: true,
 			duration: 3000,
@@ -184,6 +191,8 @@ const DashboardCopy = () => {
 		}
 	}
 
+	console.log(isOpen)
+
 	return (
 		<Box minH="100vh">
 			<audio autoPlay={true} ref={audioRef} />
@@ -193,6 +202,7 @@ const DashboardCopy = () => {
 				handleClick={handleClick}
 			/>
 			<DashBoardContent
+				display={{ base: "none", md: "block" }}
 				setCallInstance={setCallInstance}
 				remoteCallerName={remoteCallerName}
 				callIncoming={callIncoming}
@@ -204,7 +214,40 @@ const DashboardCopy = () => {
 				callOngoing={callOngoing}
 				setCallOngoing={setCallOngoing}
 				callInstance={callInstance}
+				translatedText={translatedText}
+				onClose={onClose}
 			/>
+			<Box ref={boxRef} display={{ base: "block", md: "none" }}>
+				<Drawer
+					isOpen={isOpen}
+					placement="right"
+					onClose={onClose}
+					returnFocusOnClose={false}
+					onOverlayClick={onClose}
+					size="full"
+					portalProps={{
+						containerRef: boxRef,
+					}}
+				>
+					<DrawerContent>
+						<DashBoardContent
+							setCallInstance={setCallInstance}
+							remoteCallerName={remoteCallerName}
+							callIncoming={callIncoming}
+							audioRef={audioRef}
+							intervalRef={intervalRef}
+							peer={peer}
+							uploadStreamToTranslate={uploadStreamToTranslate}
+							data={currentUser}
+							callOngoing={callOngoing}
+							setCallOngoing={setCallOngoing}
+							callInstance={callInstance}
+							translatedText={translatedText}
+							onClose={onClose}
+						/>
+					</DrawerContent>
+				</Drawer>
+			</Box>
 		</Box>
 	)
 }

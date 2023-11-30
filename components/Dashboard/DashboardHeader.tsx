@@ -1,5 +1,6 @@
 import { Avatar, Flex, HStack, IconButton, Text } from "@chakra-ui/react"
 import { IoMdCall } from "react-icons/io"
+import { IoArrowBack } from "react-icons/io5"
 import { RxDotsVertical } from "react-icons/rx"
 
 interface DashboardHeaderProps {
@@ -7,6 +8,7 @@ interface DashboardHeaderProps {
 	peer_id: string
 	onCall: (() => Promise<void>) | undefined
 	online: boolean
+	onClose: () => void
 }
 
 const DashboardHeader = ({
@@ -14,6 +16,7 @@ const DashboardHeader = ({
 	onCall,
 	peer_id,
 	online,
+	onClose,
 }: DashboardHeaderProps) => {
 	return (
 		<Flex
@@ -26,6 +29,14 @@ const DashboardHeader = ({
 			bg="brand.dark.200"
 		>
 			<HStack spacing="0.88rem">
+				<IconButton
+					fontSize={"1.33731rem"}
+					variant="ghost"
+					aria-label="open menu"
+					icon={<IoArrowBack />}
+					display={{ base: "initial", md: "none" }}
+					onClick={onClose}
+				/>
 				<Avatar
 					sx={{ "--avatar-size": "2.2rem" }}
 					size={"var(--avatar-size)"}
