@@ -61,7 +61,11 @@ function SideBarItem({ data, selected, handleClick }: SideBarItemProps) {
 							as={incoming ? SlCallIn : SlCallOut}
 						/> */}
 
-					<Text fontWeight={400} fontSize="0.75rem">
+					<Text
+						fontWeight={400}
+						fontSize="0.75rem"
+						color={data.is_online ? "brand.green" : "initial"}
+					>
 						{data.is_online ? "online" : "offline"}
 					</Text>
 				</HStack>
