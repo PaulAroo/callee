@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react"
 import {
 	Box,
 	Drawer,
@@ -6,12 +5,13 @@ import {
 	useDisclosure,
 	useToast,
 } from "@chakra-ui/react"
-import { useLoaderData } from "react-router-dom"
-
 import Peer, { MediaConnection } from "peerjs"
+import { useLoaderData } from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+
 import SideBar from "./SideBar"
-import DashBoardContent from "./DashboardContent"
 import { User } from "../../context/AuthContext"
+import DashBoardContent from "./DashboardContent"
 import { useSocket } from "../../context/SocketContext"
 
 interface AllUsers {
@@ -40,7 +40,6 @@ const Dashboard = () => {
 
 	const handleClick = (data: User) => {
 		setCurrentUser(data)
-		console.log(data)
 		onOpen()
 	}
 
@@ -66,7 +65,7 @@ const Dashboard = () => {
 
 			if (socket) {
 				socket.emit("peer_id", id)
-				console.log(5, "notify server of the peer id")
+				console.log("notify server that this user is online")
 			}
 		})
 
@@ -173,14 +172,14 @@ const Dashboard = () => {
 			mediaRecorderRef.current.start()
 
 			intervalRef.current = setInterval(() => {
-				console.log("requesting data")
-				mediaRecorderRef.current?.requestData()
+				mediaRecorderRef.current?.stop()
+				mediaRecorderRef.current?.start()
 			}, 5000)
 
 			mediaRecorderRef.current.ondataavailable = (event) => {
 				if (event.data.size > 0 && socket?.connected) {
 					console.log(0, event.data)
-					const blob = new Blob([event.data], { type: "audio/wav" })
+					const blob = new Blob([event.data], { type: "audio/webm" })
 					socket.emit(SEND_AUDIO_CHUNKS, blob)
 				}
 			}
@@ -188,8 +187,6 @@ const Dashboard = () => {
 			console.log("Media Recording Error:", error)
 		}
 	}
-
-	console.log(isOpen)
 
 	return (
 		<Box minH="100vh">
