@@ -9,18 +9,20 @@ import {
 } from "@chakra-ui/react"
 import { IoMdCall, IoMdClose } from "react-icons/io"
 
-type Variant = "incoming" | "outgoing" | "ongoing"
+type Variant = "incoming" | "outgoing" | "ongoing" | ""
 
 function CallScreen({
 	remoteCallerName,
 	variant,
 	handleHangUp,
 	handlePickup,
+	translatedText,
 }: {
 	remoteCallerName: string
 	variant: Variant
 	handlePickup: () => void
 	handleHangUp: () => void
+	translatedText: string
 }) {
 	const callStatus =
 		variant === "incoming"
@@ -54,6 +56,35 @@ function CallScreen({
 						onClick={handleHangUp}
 					/>
 				</HStack>
+			)
+		} else if (variant === "ongoing") {
+			return (
+				<VStack>
+					<Text>{translatedText}</Text>
+					<IconButton
+						aria-label="reject call"
+						rounded="full"
+						icon={<IoMdClose />}
+						fontSize="2.25rem"
+						padding="1rem"
+						height="auto"
+						bg="brand.red"
+						onClick={handleHangUp}
+					/>
+				</VStack>
+			)
+		} else if (variant === "outgoing") {
+			return (
+				<IconButton
+					aria-label="reject call"
+					rounded="full"
+					icon={<IoMdClose />}
+					fontSize="2.25rem"
+					padding="1rem"
+					height="auto"
+					bg="brand.red"
+					onClick={handleHangUp}
+				/>
 			)
 		}
 	}

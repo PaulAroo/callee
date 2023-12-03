@@ -1,5 +1,5 @@
-import { ReactNode, createContext, useEffect, useReducer } from "react"
 import { redirect } from "react-router-dom"
+import { ReactNode, createContext, useEffect, useReducer } from "react"
 
 export interface User {
 	username: string
@@ -7,6 +7,8 @@ export interface User {
 	phone_number: string | null
 	profile_pic: string | null
 	token: string
+	is_online: boolean
+	peer_id: string
 }
 
 interface State {
