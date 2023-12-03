@@ -6,12 +6,18 @@ import {
 	HStack,
 	Heading,
 	IconButton,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
 	SimpleGrid,
 } from "@chakra-ui/react"
 import { RxDotsVertical } from "react-icons/rx"
 import { TbMessagePlus } from "react-icons/tb"
 import SideBarItem from "./SideBarItem"
-import { User } from "../../context/AuthContext"
+import { AUTH_ACTION_TYPE, AuthContext, User } from "../../context/AuthContext"
+import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface SidebarProps extends BoxProps {
 	handleClick: (data: User) => void
@@ -20,6 +26,15 @@ interface SidebarProps extends BoxProps {
 }
 
 function SideBar({ handleClick, selected_user, users }: SidebarProps) {
+	const navigate = useNavigate()
+	const { dispatch } = useContext(AuthContext)
+
+	const handleLogout = () => {
+		dispatch({ type: AUTH_ACTION_TYPE.LOGOUT })
+
+		navigate("/")
+	}
+
 	const isSelected = (id: string) => {
 		if (selected_user.id === id) return true
 		return false
@@ -54,13 +69,18 @@ function SideBar({ handleClick, selected_user, users }: SidebarProps) {
 						aria-label="open menu"
 						icon={<TbMessagePlus />}
 					/>
-					<IconButton
-						size={"sm"}
-						fontSize={"1.33731rem"}
-						variant="ghost"
-						aria-label="open menu"
-						icon={<RxDotsVertical />}
-					/>
+					<Menu>
+						<MenuButton
+							as={IconButton}
+							fontSize={"1.33731rem"}
+							aria-label="Options"
+							icon={<RxDotsVertical />}
+							variant="ghost"
+						/>
+						<MenuList minW="auto" px="0.5rem">
+							<MenuItem onClick={handleLogout}>Log out</MenuItem>
+						</MenuList>
+					</Menu>
 				</HStack>
 			</Flex>
 			<SimpleGrid pl="0.5rem" gap="0.56rem">

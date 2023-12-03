@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react"
 import Peer, { MediaConnection } from "peerjs"
 import { useLoaderData } from "react-router-dom"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import SideBar from "./SideBar"
 import { User } from "../../context/AuthContext"
@@ -108,7 +108,7 @@ const Dashboard = () => {
 		}
 	}, [])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!socket) return
 
 		// Set up event listeners for various socket events:
