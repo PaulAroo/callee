@@ -83,7 +83,7 @@ function SideBar({ handleClick, selected_user, users }: SidebarProps) {
 					</Menu>
 				</HStack>
 			</Flex>
-			<SimpleGrid pl="0.5rem" gap="0.56rem" height="inherit" overflowY="scroll">
+			<SimpleGrid pl="0.5rem" gap="0.56rem" overflowY="auto">
 				<Heading fontSize="1.5rem" fontWeight={400} pl="1.34rem" mt="1rem">
 					Users
 				</Heading>

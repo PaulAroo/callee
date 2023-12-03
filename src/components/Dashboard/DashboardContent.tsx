@@ -148,7 +148,11 @@ const DashBoardContent = ({
 	}
 
 	return (
-		<Box ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }} {...rest}>
+		<Box
+			ml={{ base: 0, md: "18rem", lg: "20rem", xl: "30rem" }}
+			overflow="auto"
+			{...rest}
+		>
 			{renderContent()}
 		</Box>
 	)
