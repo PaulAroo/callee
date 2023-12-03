@@ -3,6 +3,7 @@ import { LocalStorage } from "../utils"
 
 const axiosInstance = axios.create({
 	baseURL: "https://klusterthon2023-production.up.railway.app/api",
+	// withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(
