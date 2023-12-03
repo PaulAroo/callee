@@ -100,11 +100,10 @@ const DashBoardContent = ({
 					audio: true,
 				})
 				callInstance.answer(stream)
-				// setShowCallScreen(false)
-				// setCallOutgoing(false)
 				callInstance.on("close", () => {
 					setCallInstance(undefined)
 					setCallOngoing(false)
+					setCallerName(callInstance.metadata.username)
 					stream.getTracks().forEach((track) => {
 						track.stop()
 					})

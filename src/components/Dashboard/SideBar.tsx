@@ -42,7 +42,7 @@ function SideBar({ handleClick, selected_user, users }: SidebarProps) {
 
 	return (
 		<Box
-			transition="3s ease"
+			transition="0.3s ease"
 			borderRight="1px"
 			borderRightColor="brand.darkgrey"
 			w={{ base: "full", md: "18rem", lg: "20rem", xl: "30rem" }}
