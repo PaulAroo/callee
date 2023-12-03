@@ -12,7 +12,6 @@ import { User } from "./context/AuthContext"
 
 const userLoader = async () => {
 	const user = JSON.parse(localStorage.getItem("user")!)
-	console.log(user)
 	if (user) {
 		return redirect("/dashboard")
 	}

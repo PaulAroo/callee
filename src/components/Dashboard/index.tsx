@@ -59,6 +59,23 @@ const Dashboard = () => {
 	const mediaRecorderRef = useRef<MediaRecorder>()
 	const intervalRef = useRef<number>()
 
+	useLayoutEffect(() => {
+		if (!socket) return
+
+		// Set up event listeners for various socket events:
+		socket.on(CONNECTED_EVENT, onConnect)
+		socket.on(DISCONNECT_EVENT, onDisconnect)
+		socket.on(USER_ONLINE_EVENT, handleUserOnline)
+		socket.on(TRANSLATE, onTranslate)
+
+		return () => {
+			socket.off(CONNECTED_EVENT, onConnect)
+			socket.off(DISCONNECT_EVENT, onDisconnect)
+			socket.off(USER_ONLINE_EVENT, handleUserOnline)
+			socket.off(TRANSLATE, onTranslate)
+		}
+	}, [socket])
+
 	useEffect(() => {
 		peer.on("open", (id) => {
 			setIsconnectionOpen(true)
@@ -107,23 +124,6 @@ const Dashboard = () => {
 			peer.removeListener("error")
 		}
 	}, [])
-
-	useLayoutEffect(() => {
-		if (!socket) return
-
-		// Set up event listeners for various socket events:
-		socket.on(CONNECTED_EVENT, onConnect)
-		socket.on(DISCONNECT_EVENT, onDisconnect)
-		socket.on(USER_ONLINE_EVENT, handleUserOnline)
-		socket.on(TRANSLATE, onTranslate)
-
-		return () => {
-			socket.off(CONNECTED_EVENT, onConnect)
-			socket.off(DISCONNECT_EVENT, onDisconnect)
-			socket.off(USER_ONLINE_EVENT, handleUserOnline)
-			socket.off(TRANSLATE, onTranslate)
-		}
-	}, [socket])
 
 	const onConnect = () => {
 		// setIsSocketConnected(true)
