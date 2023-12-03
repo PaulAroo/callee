@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useLayoutEffect, useState } from "react"
 import socketio from "socket.io-client"
 import { AuthContext } from "./AuthContext"
 
@@ -25,7 +25,7 @@ const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const { user } = useContext(AuthContext)
 	const [socket, setSocket] = useState<ReturnType<typeof socketio> | null>(null)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!user) return
 		setSocket(getSocket(user.token))
 	}, [user])

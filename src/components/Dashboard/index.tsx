@@ -89,6 +89,7 @@ const Dashboard = () => {
 
 		peer.on("call", (call) => {
 			if (!callOngoing) {
+				onOpen()
 				console.log(call.metadata.username)
 				setRemoteCallerName(call.metadata.username)
 				setCallInstance(call)
@@ -175,7 +176,7 @@ const Dashboard = () => {
 			intervalRef.current = setInterval(() => {
 				mediaRecorderRef.current?.stop()
 				mediaRecorderRef.current?.start()
-			}, 5000)
+			}, 30000)
 
 			mediaRecorderRef.current.ondataavailable = (event) => {
 				if (event.data.size > 0 && socket?.connected) {
