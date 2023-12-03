@@ -7,10 +7,10 @@ import {
 } from "@chakra-ui/react"
 import Peer, { MediaConnection } from "peerjs"
 import { useLoaderData } from "react-router-dom"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import SideBar from "./SideBar"
-import { User } from "../../context/AuthContext"
+import { AuthContext, User } from "../../context/AuthContext"
 import DashBoardContent from "./DashboardContent"
 import { useSocket } from "../../context/SocketContext"
 
@@ -30,6 +30,7 @@ const USER_ONLINE_EVENT = "user_online"
 const SEND_AUDIO_CHUNKS = "audio_chunks"
 
 const Dashboard = () => {
+	const { user } = useContext(AuthContext)
 	const toast = useToast()
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const data = useLoaderData() as AllUsers
@@ -180,7 +181,7 @@ const Dashboard = () => {
 				if (event.data.size > 0 && socket?.connected) {
 					console.log(0, event.data)
 					const blob = new Blob([event.data], { type: "audio/webm" })
-					socket.emit(SEND_AUDIO_CHUNKS, blob)
+					socket.emit(SEND_AUDIO_CHUNKS, blob, user)
 				}
 			}
 		} catch (error) {
