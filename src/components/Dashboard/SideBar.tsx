@@ -83,19 +83,27 @@ function SideBar({ handleClick, selected_user, users }: SidebarProps) {
 					</Menu>
 				</HStack>
 			</Flex>
-			<SimpleGrid pl="0.5rem" gap="0.56rem" overflowY="auto">
+			<Box>
 				<Heading fontSize="1.5rem" fontWeight={400} pl="1.34rem" mt="1rem">
 					Users
 				</Heading>
-				{users.map((user) => (
-					<SideBarItem
-						selected={isSelected(user.id)}
-						key={user.id}
-						data={user}
-						handleClick={() => handleClick(user)}
-					/>
-				))}
-			</SimpleGrid>
+				<SimpleGrid
+					pl="0.5rem"
+					gap="0.56rem"
+					overflowY="auto"
+					maxH="84vh"
+					marginTop="1rem"
+				>
+					{users.map((user) => (
+						<SideBarItem
+							selected={isSelected(user.id)}
+							key={user.id}
+							data={user}
+							handleClick={() => handleClick(user)}
+						/>
+					))}
+				</SimpleGrid>
+			</Box>
 		</Box>
 	)
 }
