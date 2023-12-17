@@ -12,17 +12,17 @@ import {
 	MenuList,
 	SimpleGrid,
 } from "@chakra-ui/react"
-import { RxDotsVertical } from "react-icons/rx"
-import { TbMessagePlus } from "react-icons/tb"
-import SideBarItem from "./SideBarItem"
-import { AUTH_ACTION_TYPE, AuthContext, User } from "../../context/AuthContext"
 import { useContext } from "react"
+import SideBarItem from "./SideBarItem"
+import { TbMessagePlus } from "react-icons/tb"
 import { useNavigate } from "react-router-dom"
+import { RxDotsVertical } from "react-icons/rx"
+import { AUTH_ACTION_TYPE, AuthContext, User } from "../../context/AuthContext"
 
 interface SidebarProps extends BoxProps {
-	handleClick: (data: User) => void
 	users: User[]
 	selected_user: User
+	handleClick: (data: User) => void
 }
 
 function SideBar({ handleClick, selected_user, users }: SidebarProps) {
@@ -31,7 +31,6 @@ function SideBar({ handleClick, selected_user, users }: SidebarProps) {
 
 	const handleLogout = () => {
 		dispatch({ type: AUTH_ACTION_TYPE.LOGOUT })
-
 		navigate("/")
 	}
 

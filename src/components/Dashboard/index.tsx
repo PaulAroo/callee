@@ -10,9 +10,9 @@ import { useLoaderData } from "react-router-dom"
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import SideBar from "./SideBar"
-import { AuthContext, User } from "../../context/AuthContext"
 import DashBoardContent from "./DashboardContent"
 import { useSocket } from "../../context/SocketContext"
+import { AuthContext, User } from "../../context/AuthContext"
 
 interface AllUsers {
 	userData: Array<User>
@@ -30,40 +30,31 @@ const USER_ONLINE_EVENT = "user_online"
 const SEND_AUDIO_CHUNKS = "audio_chunks"
 
 const Dashboard = () => {
-	const { user } = useContext(AuthContext)
 	const toast = useToast()
-	const { isOpen, onOpen, onClose } = useDisclosure()
-	const data = useLoaderData() as AllUsers
-	const boxRef = useRef<HTMLDivElement | null>(null)
-
-	const [allUsers, setAllUsers] = useState(data?.userData)
-	const [currentUser, setCurrentUser] = useState<User>(data.userData[0])
-
-	const handleClick = (data: User) => {
-		setCurrentUser(data)
-		onOpen()
-	}
-
 	const { socket } = useSocket()
+	const data = useLoaderData() as AllUsers
+	const { isOpen, onOpen, onClose } = useDisclosure()
+
+	const { user } = useContext(AuthContext)
+	const [, setIsconnectionOpen] = useState(false)
 	const [callOngoing, setCallOngoing] = useState(false)
+	const [callIncoming, setCallIncoming] = useState(false)
+	const [allUsers, setAllUsers] = useState(data?.userData)
+	const [translatedText, setTranslatedText] = useState("")
+	const [remoteCallerName, setRemoteCallerName] = useState("")
+	const [currentUser, setCurrentUser] = useState<User>(data.userData[0])
 	const [callInstance, setCallInstance] = useState<
 		MediaConnection | undefined
 	>()
 
-	const [callIncoming, setCallIncoming] = useState(false)
-	const [remoteCallerName, setRemoteCallerName] = useState<any>()
-	const [translatedText, setTranslatedText] = useState("")
-
-	const [, setIsconnectionOpen] = useState(false)
-
-	const audioRef = useRef<HTMLAudioElement | null>(null)
-	const mediaRecorderRef = useRef<MediaRecorder>()
 	const intervalRef = useRef<number>()
+	const mediaRecorderRef = useRef<MediaRecorder>()
+	const boxRef = useRef<HTMLDivElement | null>(null)
+	const audioRef = useRef<HTMLAudioElement | null>(null)
 
 	useLayoutEffect(() => {
 		if (!socket) return
 
-		// Set up event listeners for various socket events:
 		socket.on(CONNECTED_EVENT, onConnect)
 		socket.on(DISCONNECT_EVENT, onDisconnect)
 		socket.on(USER_ONLINE_EVENT, handleUserOnline)
@@ -126,6 +117,11 @@ const Dashboard = () => {
 			peer.removeListener("error")
 		}
 	}, [])
+
+	const handleUserClick = (data: User) => {
+		setCurrentUser(data)
+		onOpen()
+	}
 
 	const onConnect = () => {
 		// setIsSocketConnected(true)
@@ -195,24 +191,24 @@ const Dashboard = () => {
 			<audio autoPlay={true} ref={audioRef} />
 			<SideBar
 				users={allUsers}
+				handleClick={handleUserClick}
 				selected_user={currentUser}
-				handleClick={handleClick}
 			/>
 			<DashBoardContent
 				display={{ base: "none", md: "block" }}
+				peer={peer}
+				onClose={onClose}
+				data={currentUser}
+				audioRef={audioRef}
+				callOngoing={callOngoing}
+				intervalRef={intervalRef}
+				callIncoming={callIncoming}
+				callInstance={callInstance}
+				setCallOngoing={setCallOngoing}
+				translatedText={translatedText}
 				setCallInstance={setCallInstance}
 				remoteCallerName={remoteCallerName}
-				callIncoming={callIncoming}
-				audioRef={audioRef}
-				intervalRef={intervalRef}
-				peer={peer}
 				uploadStreamToTranslate={uploadStreamToTranslate}
-				data={currentUser}
-				callOngoing={callOngoing}
-				setCallOngoing={setCallOngoing}
-				callInstance={callInstance}
-				translatedText={translatedText}
-				onClose={onClose}
 			/>
 			<Box ref={boxRef} display={{ base: "block", md: "none" }}>
 				<Drawer
@@ -228,19 +224,19 @@ const Dashboard = () => {
 				>
 					<DrawerContent>
 						<DashBoardContent
+							peer={peer}
+							onClose={onClose}
+							data={currentUser}
+							audioRef={audioRef}
+							callOngoing={callOngoing}
+							intervalRef={intervalRef}
+							callIncoming={callIncoming}
+							callInstance={callInstance}
+							setCallOngoing={setCallOngoing}
+							translatedText={translatedText}
 							setCallInstance={setCallInstance}
 							remoteCallerName={remoteCallerName}
-							callIncoming={callIncoming}
-							audioRef={audioRef}
-							intervalRef={intervalRef}
-							peer={peer}
 							uploadStreamToTranslate={uploadStreamToTranslate}
-							data={currentUser}
-							callOngoing={callOngoing}
-							setCallOngoing={setCallOngoing}
-							callInstance={callInstance}
-							translatedText={translatedText}
-							onClose={onClose}
 						/>
 					</DrawerContent>
 				</Drawer>

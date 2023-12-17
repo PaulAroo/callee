@@ -11,17 +11,17 @@ export interface User {
 	peer_id: string
 }
 
-interface State {
-	user: User | null
-	loading: boolean
-	error: string | null
-}
-
 export enum AUTH_ACTION_TYPE {
 	LOGIN_START = "LOGIN_START",
 	LOGIN_SUCCESS = "LOGIN_SUCCESS",
 	LOGIN_FAILURE = "LOGIN_FAILURE",
 	LOGOUT = "LOGOUT",
+}
+
+interface AuthState {
+	user: User | null
+	loading: boolean
+	error: string | null
 }
 
 type Action =
@@ -30,13 +30,13 @@ type Action =
 	| { type: AUTH_ACTION_TYPE.LOGIN_FAILURE; payload: string }
 	| { type: AUTH_ACTION_TYPE.LOGOUT }
 
-const INITIAL_STATE: State = {
+const INITIAL_STATE: AuthState = {
 	user: JSON.parse(localStorage.getItem("user")!) || null,
 	loading: false,
 	error: null,
 }
 
-type ContextState = State & {
+type ContextState = AuthState & {
 	dispatch: React.Dispatch<Action>
 }
 
@@ -45,7 +45,7 @@ export const AuthContext = createContext<ContextState>({
 	dispatch: () => {},
 })
 
-const AuthReducer = (state: State, action: Action) => {
+const AuthReducer = (state: AuthState, action: Action) => {
 	switch (action.type) {
 		case "LOGIN_START":
 			return {
