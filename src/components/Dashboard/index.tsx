@@ -120,7 +120,10 @@ const Dashboard = () => {
 
 	const handleUserClick = (data: User) => {
 		setCurrentUser(data)
-		onOpen()
+		const isMobile = !window.matchMedia("(min-width: 48em)").matches
+		if (isMobile) {
+			onOpen()
+		}
 	}
 
 	const onConnect = () => {
