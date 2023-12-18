@@ -1,18 +1,18 @@
 import { ChakraBaseProvider } from "@chakra-ui/react"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
+import HomePage from "./pages/Home"
 import ErrorPage from "./pages/Error"
 import theme from "./lib/styles/theme"
 import SignInPage from "./pages/Signin"
 import SignUpPage from "./pages/Signup"
 import Dashboard from "./pages/Dashboard"
-import LandingPage from "./pages/LandingPage"
 import { fetchAllUsers, verifyAndRedirectIfLoggedIn } from "./utils/loaders"
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <LandingPage />,
+		element: <HomePage />,
 		loader: verifyAndRedirectIfLoggedIn,
 	},
 	{
