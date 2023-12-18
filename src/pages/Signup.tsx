@@ -1,10 +1,12 @@
-import { SimpleGrid, useToast } from "@chakra-ui/react"
-import SignUpCard from "../components/SignUpCard"
-import { ChangeEvent, FormEvent, useContext, useState } from "react"
-import { AUTH_ACTION_TYPE, AuthContext } from "../context/AuthContext"
-import { useNavigate } from "react-router-dom"
-import axios from "../axios"
 import { AxiosError } from "axios"
+import { motion } from "framer-motion"
+import { useNavigate } from "react-router-dom"
+import { SimpleGrid, useToast } from "@chakra-ui/react"
+import { ChangeEvent, FormEvent, useContext, useState } from "react"
+
+import axios from "../axios"
+import SignUpCard from "../components/SignUpCard"
+import { AUTH_ACTION_TYPE, AuthContext } from "../context/AuthContext"
 
 export type SignUpInputs = {
 	email: string
@@ -66,14 +68,20 @@ function SignUpPage() {
 	}
 
 	return (
-		<SimpleGrid w="full" h="100vh" placeItems="center">
-			<SignUpCard
-				busy={loading}
-				handleInputchange={handleInputChange}
-				handleSubmit={handleSubmit}
-				handleSelectchange={handleSelectchange}
-			/>
-		</SimpleGrid>
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3 }}
+		>
+			<SimpleGrid w="full" h="100vh" placeItems="center">
+				<SignUpCard
+					busy={loading}
+					handleInputchange={handleInputChange}
+					handleSubmit={handleSubmit}
+					handleSelectchange={handleSelectchange}
+				/>
+			</SimpleGrid>
+		</motion.div>
 	)
 }
 

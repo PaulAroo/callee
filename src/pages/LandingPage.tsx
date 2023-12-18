@@ -11,6 +11,7 @@ import Navbar from "../components/Navbar"
 
 import section1ImageUrl from "../assets/callee_nobg.png"
 import { useNavigate } from "react-router-dom"
+import { motion } from "framer-motion"
 
 function LandingPage() {
 	const navigate = useNavigate()
@@ -18,7 +19,11 @@ function LandingPage() {
 	return (
 		<>
 			<Navbar />
-			<main>
+			<motion.main
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 0.3 }}
+			>
 				<Container maxW="container.xl" as="section">
 					<VStack pt="5.62rem" pb="1.88rem">
 						<Heading
@@ -73,7 +78,7 @@ function LandingPage() {
 						background="linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #0E0E0E 79.44%)"
 					/>
 				</Box>
-			</main>
+			</motion.main>
 		</>
 	)
 }

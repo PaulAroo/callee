@@ -9,10 +9,10 @@ import Peer, { MediaConnection } from "peerjs"
 import { useLoaderData } from "react-router-dom"
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 
-import SideBar from "./SideBar"
-import DashBoardContent from "./DashboardContent"
-import { useSocket } from "../../context/SocketContext"
-import { AuthContext, User } from "../../context/AuthContext"
+import SideBar from "../components/Dashboard/SideBar"
+import DashBoardContent from "../components/Dashboard/Content"
+import { useSocket } from "../context/SocketContext"
+import { AuthContext, User } from "../context/AuthContext"
 
 interface AllUsers {
 	userData: Array<User>
@@ -201,11 +201,11 @@ const Dashboard = () => {
 				display={{ base: "none", md: "block" }}
 				peer={peer}
 				onClose={onClose}
-				data={currentUser}
 				audioRef={audioRef}
 				callOngoing={callOngoing}
 				intervalRef={intervalRef}
 				callIncoming={callIncoming}
+				selected_user={currentUser}
 				callInstance={callInstance}
 				setCallOngoing={setCallOngoing}
 				translatedText={translatedText}
@@ -229,10 +229,10 @@ const Dashboard = () => {
 						<DashBoardContent
 							peer={peer}
 							onClose={onClose}
-							data={currentUser}
 							audioRef={audioRef}
 							callOngoing={callOngoing}
 							intervalRef={intervalRef}
+							selected_user={currentUser}
 							callIncoming={callIncoming}
 							callInstance={callInstance}
 							setCallOngoing={setCallOngoing}

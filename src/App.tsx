@@ -3,10 +3,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
 import ErrorPage from "./pages/Error"
 import theme from "./lib/styles/theme"
-import SignInPage from "./pages/signin"
-import SignUpPage from "./pages/signup"
+import SignInPage from "./pages/Signin"
+import SignUpPage from "./pages/Signup"
+import Dashboard from "./pages/Dashboard"
 import LandingPage from "./pages/LandingPage"
-import Dashboard from "./components/Dashboard"
 import { fetchAllUsers, verifyAndRedirectIfLoggedIn } from "./utils/loaders"
 
 const router = createBrowserRouter([

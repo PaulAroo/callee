@@ -1,11 +1,13 @@
-import { SimpleGrid, useToast } from "@chakra-ui/react"
-import SignInCard from "../components/SignInCard"
-import { ChangeEvent, FormEvent, useContext, useState } from "react"
 import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
-import { AuthContext, AUTH_ACTION_TYPE } from "../context/AuthContext"
+import { ChangeEvent, FormEvent, useContext, useState } from "react"
+
 import axios from "../axios"
+import { motion } from "framer-motion"
 import { LocalStorage } from "../utils"
+import SignInCard from "../components/SignInCard"
+import { SimpleGrid, useToast } from "@chakra-ui/react"
+import { AuthContext, AUTH_ACTION_TYPE } from "../context/AuthContext"
 
 export type SignInInputs = {
 	username: string
@@ -78,13 +80,19 @@ function SignInPage() {
 	}
 
 	return (
-		<SimpleGrid w="full" h="100vh" placeItems="center">
-			<SignInCard
-				busy={loading}
-				handleInputchange={handleInputChange}
-				handleSubmit={handleSubmit}
-			/>
-		</SimpleGrid>
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3 }}
+		>
+			<SimpleGrid w="full" h="100vh" placeItems="center">
+				<SignInCard
+					busy={loading}
+					handleInputchange={handleInputChange}
+					handleSubmit={handleSubmit}
+				/>
+			</SimpleGrid>
+		</motion.div>
 	)
 }
 

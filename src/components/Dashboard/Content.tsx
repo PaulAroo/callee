@@ -1,13 +1,13 @@
+import { useContext, useState } from "react"
 import Peer, { MediaConnection } from "peerjs"
 import { Box, BoxProps } from "@chakra-ui/react"
 
-import DashboardHeader from "./DashboardHeader"
-import { User } from "../../context/AuthContext"
-import { useState } from "react"
+import DashboardHeader from "./Header"
 import CallScreen from "../CallScreen"
+import { AuthContext, User } from "../../context/AuthContext"
 
 interface DashBoardContentProps extends BoxProps {
-	data: User
+	selected_user: User
 	peer: Peer
 	uploadStreamToTranslate: (stream: MediaStream) => void
 	audioRef: React.MutableRefObject<HTMLAudioElement | null>
@@ -25,7 +25,7 @@ interface DashBoardContentProps extends BoxProps {
 }
 
 const DashBoardContent = ({
-	data,
+	selected_user,
 	intervalRef,
 	audioRef,
 	uploadStreamToTranslate,
@@ -40,6 +40,7 @@ const DashBoardContent = ({
 	onClose,
 	...rest
 }: DashBoardContentProps) => {
+	const { user } = useContext(AuthContext)
 	const [callOutgoing, setCallOutgoing] = useState(false)
 	const [callerName, setCallerName] = useState(remoteCallerName)
 
@@ -51,33 +52,34 @@ const DashBoardContent = ({
 					audio: true,
 				})
 
-				if (peer) {
-					const call = peer.call(remotePeerId, stream, {
-						metadata: {
-							username: data.username,
-						},
+				const call = peer.call(remotePeerId, stream, {
+					metadata: {
+						username: user?.username,
+					},
+				})
+
+				setCallInstance(call)
+				setCallerName(selected_user.username)
+				setCallOutgoing(true)
+
+				call.on("stream", (remoteStream) => {
+					setCallOngoing(true)
+					setCallOutgoing(false)
+					uploadStreamToTranslate(remoteStream)
+					if (audioRef.current) {
+						audioRef.current.srcObject = remoteStream
+						audioRef.current.play()
+					}
+				})
+
+				call.on("close", () => {
+					setCallOngoing(false)
+					stream.getTracks().forEach((track) => {
+						track.stop()
 					})
-					setCallInstance(call)
-					setCallerName(data.username)
-					setCallOutgoing(true)
-					call.on("stream", (remoteStream) => {
-						setCallOngoing(true)
-						setCallOutgoing(false)
-						uploadStreamToTranslate(remoteStream)
-						if (audioRef.current) {
-							audioRef.current.srcObject = remoteStream
-							audioRef.current.play()
-						}
-					})
-					call.on("close", () => {
-						setCallOngoing(false)
-						stream.getTracks().forEach((track) => {
-							track.stop()
-						})
-						clearInterval(intervalRef.current)
-						setCallInstance(undefined)
-					})
-				}
+					clearInterval(intervalRef.current)
+					setCallInstance(undefined)
+				})
 			} catch (error) {
 				console.log(error)
 			}
@@ -101,13 +103,13 @@ const DashBoardContent = ({
 				})
 				callInstance.answer(stream)
 				callInstance.on("close", () => {
-					setCallInstance(undefined)
 					setCallOngoing(false)
 					setCallerName(callInstance.metadata.username)
 					stream.getTracks().forEach((track) => {
 						track.stop()
 					})
 					clearInterval(intervalRef.current)
+					setCallInstance(undefined)
 				})
 			} catch (error) {
 				console.log(error)
@@ -137,10 +139,10 @@ const DashBoardContent = ({
 		} else {
 			return (
 				<DashboardHeader
-					online={data.is_online}
-					peer_id={data.peer_id}
-					name={data.username}
-					onCall={call(data.peer_id)}
+					online={selected_user.is_online}
+					peer_id={selected_user.peer_id}
+					name={selected_user.username}
+					onCall={call(selected_user.peer_id)}
 					onClose={onClose}
 				/>
 			)

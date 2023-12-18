@@ -48,7 +48,9 @@ function SideBarItem({ data, selected, handleClick }: SideBarItemProps) {
 			/>
 			<VStack spacing={0} w="full" align="flex-start">
 				<HStack justifyContent="space-between" w="full">
-					<Text fontWeight={600}>{data.username}</Text>
+					<Text fontWeight={600} textTransform="capitalize">
+						{data.username}
+					</Text>
 					{/* <Text fontWeight={400} fontSize="0.75rem">
 							{duration}
 						</Text> */}

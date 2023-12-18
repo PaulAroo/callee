@@ -1,7 +1,7 @@
-import { Avatar, Flex, HStack, IconButton, Text } from "@chakra-ui/react"
 import { IoMdCall } from "react-icons/io"
 import { IoArrowBack } from "react-icons/io5"
 import { RxDotsVertical } from "react-icons/rx"
+import { Avatar, Flex, HStack, IconButton, Text } from "@chakra-ui/react"
 
 interface DashboardHeaderProps {
 	name: string

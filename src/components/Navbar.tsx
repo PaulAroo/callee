@@ -1,13 +1,18 @@
 import { Container, HStack } from "@chakra-ui/react"
 import { Link as ReactRouterLink } from "react-router-dom"
 import { Link as ChakraLink } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 
 import BrandLogoIcon from "./BrandLogoIcon"
 import BrandLogoText from "./BrandLogoText"
 
 function Navbar() {
 	return (
-		<nav>
+		<motion.nav
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3 }}
+		>
 			<Container maxW="container.xl" p={0}>
 				<HStack px="2.47rem" py="2.34rem" justify="space-between">
 					<ReactRouterLink to="/">
@@ -42,7 +47,7 @@ function Navbar() {
 					</ChakraLink>
 				</HStack>
 			</Container>
-		</nav>
+		</motion.nav>
 	)
 }
 
