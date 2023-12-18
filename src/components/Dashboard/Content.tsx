@@ -42,7 +42,6 @@ const DashBoardContent = ({
 }: DashBoardContentProps) => {
 	const { user } = useContext(AuthContext)
 	const [callOutgoing, setCallOutgoing] = useState(false)
-	const [callerName, setCallerName] = useState(remoteCallerName)
 
 	const call = (remotePeerId: string) => {
 		if (!remotePeerId) return
@@ -59,7 +58,6 @@ const DashBoardContent = ({
 				})
 
 				setCallInstance(call)
-				setCallerName(selected_user.username)
 				setCallOutgoing(true)
 
 				call.on("stream", (remoteStream) => {
@@ -89,7 +87,6 @@ const DashBoardContent = ({
 	const handleHangUp = () => {
 		if (callInstance) {
 			callInstance.close()
-			// setShowCallScreen(false)
 			setCallOngoing(false)
 			setCallInstance(undefined)
 		}
@@ -104,7 +101,6 @@ const DashBoardContent = ({
 				callInstance.answer(stream)
 				callInstance.on("close", () => {
 					setCallOngoing(false)
-					setCallerName(callInstance.metadata.username)
 					stream.getTracks().forEach((track) => {
 						track.stop()
 					})
@@ -129,21 +125,21 @@ const DashBoardContent = ({
 
 			return (
 				<CallScreen
+					variant={variant}
 					handlePickup={handlePickup}
 					handleHangUp={handleHangUp}
-					variant={variant}
-					remoteCallerName={callerName}
 					translatedText={translatedText}
+					remoteCallerName={remoteCallerName}
 				/>
 			)
 		} else {
 			return (
 				<DashboardHeader
-					online={selected_user.is_online}
-					peer_id={selected_user.peer_id}
-					name={selected_user.username}
-					onCall={call(selected_user.peer_id)}
 					onClose={onClose}
+					name={selected_user.username}
+					peer_id={selected_user.peer_id}
+					online={selected_user.is_online}
+					onCall={call(selected_user.peer_id)}
 				/>
 			)
 		}

@@ -41,8 +41,8 @@ const Dashboard = () => {
 	const [callIncoming, setCallIncoming] = useState(false)
 	const [allUsers, setAllUsers] = useState(data?.userData)
 	const [translatedText, setTranslatedText] = useState("")
-	const [remoteCallerName, setRemoteCallerName] = useState("")
 	const [currentUser, setCurrentUser] = useState<User>(data.userData[0])
+	const [remoteCallerName, setRemoteCallerName] = useState(currentUser.username)
 	const [callInstance, setCallInstance] = useState<
 		MediaConnection | undefined
 	>()
@@ -72,6 +72,8 @@ const Dashboard = () => {
 		peer.on("open", (id) => {
 			setIsconnectionOpen(true)
 
+			console.log(0, "peer connection opened", { con: socket?.connected })
+
 			if (socket) {
 				socket.emit("peer_id", id)
 				console.log("notify server that this user is online")
@@ -80,9 +82,8 @@ const Dashboard = () => {
 
 		peer.on("call", (call) => {
 			if (!callOngoing) {
-				onOpen()
-				console.log(call.metadata.username)
 				setRemoteCallerName(call.metadata.username)
+				onOpen()
 				setCallInstance(call)
 				setCallIncoming(true)
 				call.on("stream", function (remoteStream) {
@@ -101,6 +102,7 @@ const Dashboard = () => {
 		peer.on("error", (error) => {
 			setIsconnectionOpen(peer.open)
 			console.log("peer connection error", error)
+			// display toast to show connection error // or dialog to reload window
 			try {
 				if (peer.disconnected) {
 					peer.reconnect()
@@ -120,6 +122,7 @@ const Dashboard = () => {
 
 	const handleUserClick = (data: User) => {
 		setCurrentUser(data)
+		setRemoteCallerName(data.username)
 		const isMobile = !window.matchMedia("(min-width: 48em)").matches
 		if (isMobile) {
 			onOpen()
