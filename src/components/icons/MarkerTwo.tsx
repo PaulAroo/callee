@@ -2,8 +2,8 @@ function MarkerTwo() {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width="69"
-			height="86"
+			width="4.3125em"
+			height="5.375em"
 			viewBox="0 0 69 86"
 			fill="none"
 		>
