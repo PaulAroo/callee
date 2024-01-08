@@ -3,8 +3,8 @@ import { Link as ReactRouterLink } from "react-router-dom"
 import { Link as ChakraLink } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 
-import BrandLogoIcon from "../BrandLogoIcon"
-import BrandLogoText from "../BrandLogoText"
+import BrandLogoIcon from "../icons/BrandLogoIcon"
+import BrandLogoText from "../icons/BrandLogoText"
 
 function Navbar() {
 	return (

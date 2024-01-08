@@ -15,8 +15,8 @@ import {
 import PasswordInput from "./PasswordInput"
 import { Link } from "react-router-dom"
 import { ChangeEvent, FormEvent } from "react"
-import BrandLogoIcon from "./BrandLogoIcon"
-import BrandLogoText from "./BrandLogoText"
+import BrandLogoIcon from "./icons/BrandLogoIcon"
+import BrandLogoText from "./icons/BrandLogoText"
 
 function SignInCard({
 	handleInputchange,

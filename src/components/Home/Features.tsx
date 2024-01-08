@@ -13,8 +13,8 @@ function Features() {
 						y: 50,
 					}}
 					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ amount: 0.2, once: true }}
-					transition="0.4s linear"
+					viewport={{ amount: 0.3, once: true }}
+					transition="0.4s circIn"
 					maxW={"65.3rem"}
 					marginInline={"auto"}
 					flexWrap={{ base: "wrap", md: "nowrap" }}
